@@ -11,6 +11,9 @@
 		"start:dev": "tsx watch src/server.ts",
 		"build": "tsup src --out-dir build"
 	},
+	"prisma": {
+		"seed": "tsx prisma/seeds/db-seed.ts"
+	},
 	"dependencies": {
 		"@prisma/client": "5.4.2",
 		"dotenv": "16.3.1",
@@ -18,6 +21,7 @@
 		"zod": "3.22.4"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "8.2.0",
 		"@types/node": "20.8.7",
 		"prisma": "5.4.2",
 		"tsup": "7.2.0",

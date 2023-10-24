@@ -9,3 +9,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hashed")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @map("profile_id")
+
+  @@map("users")
+}
+
+model Profile {
+  id   String @id @default(uuid())
+  name String @unique
+  User User[]
+
+  @@map("user_profiles")
+}
