@@ -10,8 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Profile {
+  id   String @id @default(cuid())
+  name String @unique
+
+  users User[]
+
+  @@map("user_profiles")
+}
+
 model User {
-  id           String   @id @default(uuid())
+  id           String   @id @default(cuid())
   name         String
   email        String   @unique
   passwordHash String   @map("password_hashed")
@@ -21,13 +30,119 @@ model User {
   profile   Profile @relation(fields: [profileId], references: [id])
   profileId String  @map("profile_id")
 
+  doctors  Doctor[]
+  patients Patient[]
+
   @@map("users")
 }
 
-model Profile {
-  id   String @id @default(uuid())
-  name String @unique
-  User User[]
+enum Gender {
+  MASCULINO
+  FEMININO
+  MALE
+  FEMALE
+}
 
-  @@map("user_profiles")
+model Specialty {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  doctors      Doctor[]
+  appointments Appointment[]
+
+  @@map("specialties")
+}
+
+model Doctor {
+  id                String    @id @default(cuid())
+  gender            Gender
+  photoUrl          String?   @map("photo_url")
+  birthDate         DateTime? @map("birth_date")
+  phone             String?
+  licenseNumber     String    @map("license_number")
+  licenseExpiryDate DateTime  @map("license_expiry_date")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  specialties  Specialty[]
+  schedules    DoctorSchedule[]
+  appointments Appointment[]
+
+  @@map("doctors")
+}
+
+model DoctorSchedule {
+  id          String   @unique @default(cuid())
+  date        DateTime @db.Date
+  startTime   DateTime @map("start_time") @db.Time(1)
+  endTime     DateTime @map("end_time") @db.Time(1)
+  isScheduled Boolean  @default(false) @map("is_scheduled")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  doctor      Doctor       @relation(fields: [doctorId], references: [id])
+  doctorId    String       @map("doctor_id")
+  appointment Appointment?
+
+  @@id([id, doctorId, date, startTime, endTime])
+  @@map("doctor_schedules")
+}
+
+model Patient {
+  id                      String   @id @default(cuid())
+  gender                  Gender
+  birthDate               DateTime @map("birth_date")
+  address                 String?
+  phone                   String?
+  insuranceProvider       String?  @map("insurance_provider")
+  insurance_policy_number String?  @map("insurance_policy_number")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique @map("user_id")
+
+  appointments Appointment[]
+
+  @@map("patients")
+}
+
+model Appointment {
+  appointmentNumber Int      @map("appointment_number")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  doctor           Doctor                    @relation(fields: [doctorId], references: [id])
+  doctorId         String                    @map("doctor_id")
+  specialty        Specialty                 @relation(fields: [specialtyId], references: [id])
+  specialtyId      String
+  patient          Patient                   @relation(fields: [patientId], references: [id])
+  patientId        String
+  doctorSchedule   DoctorSchedule            @relation(fields: [doctorScheduleId], references: [id])
+  doctorScheduleId String                    @unique @map("doctor_schedule_id")
+  medicines        MedicinesOnAppointments[]
+
+  @@id([appointmentNumber, doctorId])
+  @@map("appointments")
+}
+
+model Medicine {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  appointments MedicinesOnAppointments[]
+
+  @@map("medicines")
+}
+
+model MedicinesOnAppointments {
+  appointment         Appointment @relation(fields: [appointmentNumber, appointmentDoctorId], references: [appointmentNumber, doctorId])
+  appointmentNumber   Int         @map("appointment_number")
+  appointmentDoctorId String      @map("appointment_doctor_id")
+  medicine            Medicine    @relation(fields: [medicineId], references: [id])
+  medicineId          String      @map("medicine_id")
+
+  @@id([appointmentNumber, appointmentDoctorId, medicineId])
+  @@map("prescriptions")
 }
