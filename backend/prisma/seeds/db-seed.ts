@@ -6,9 +6,14 @@ import dayjs from 'dayjs';
 const prisma = new PrismaClient();
 
 async function seeder() {
-	// * These default profiles must exist in table 'profiles' from the beginning: 'ADMIN', 'EMPLOYEE', 'DOCTOR', 'PATIENT' //
+	// ? These default profiles must exist in table 'profiles' from the beginning: 'ADMINISTRADOR', 'COLABORADOR', 'MEDICO', 'PACIENTE' //
 
-	const profileNames: string[] = ['ADMIN', 'EMPLOYEE', 'DOCTOR', 'PATIENT'];
+	const profileNames: string[] = [
+		'ADMINISTRADOR',
+		'COLABORADOR',
+		'MEDICO',
+		'PACIENTE',
+	];
 
 	await Promise.all(
 		profileNames.map(async (name) => {
@@ -20,12 +25,10 @@ async function seeder() {
 		})
 	);
 
-	// * comment/un-comment to seed or not the other tables //
-
-	// seed 4 users with 'ADMIN' profile
+	// Register the superuser 'ADMINISTRADOR' profile
 	const adminProfile = await prisma.profile.findUnique({
 		where: {
-			name: 'ADMIN',
+			name: 'ADMINISTRADOR',
 		},
 		select: {
 			id: true,
@@ -33,204 +36,233 @@ async function seeder() {
 	});
 
 	if (!adminProfile) {
-		console.error("⚠️ No 'ADMIN' profile in database");
-		throw new Error("No 'ADMIN' profile in database");
+		console.error("⚠️ No 'ADMINISTRADOR' profile in database");
+		throw new Error("No 'ADMINISTRADOR' profile in database");
 	}
 
-	for (let i = 0; i < 4; i++) {
-		const firstName = fakerPT_PT.person.firstName();
-		const lastName = fakerPT_PT.person.lastName();
-		const name = `${firstName} ${lastName}`;
-		const email = faker.internet.exampleEmail({
-			firstName: firstName,
-			lastName: lastName,
-		});
-		const passwordHash = await hash('123456', 6);
+	const name = 'superuser';
+	const email = 'superuser@example.com';
+	const passwordHash = await hash('123456', 6);
 
-		await prisma.user.create({
-			data: {
-				name,
-				email,
-				passwordHash: passwordHash,
-				profileId: adminProfile.id,
-			},
-		});
-	}
-
-	// seed 4 users with 'EMPLOYEE' profile
-	const employeeProfile = await prisma.profile.findUnique({
-		where: {
-			name: 'EMPLOYEE',
-		},
-		select: {
-			id: true,
+	await prisma.user.create({
+		data: {
+			name,
+			email,
+			passwordHash: passwordHash,
+			profileId: adminProfile.id,
 		},
 	});
 
-	if (!employeeProfile) {
-		console.error("⚠️ No 'EMPLOYEE' profile in database");
-		throw new Error("No 'EMPLOYEE' profile in database");
-	}
+	// ? comment/un-comment to seed or not the other tables //
 
-	for (let i = 0; i < 4; i++) {
-		const firstName = fakerPT_PT.person.firstName();
-		const lastName = fakerPT_PT.person.lastName();
-		const name = `${firstName} ${lastName}`;
-		const email = faker.internet.exampleEmail({
-			firstName: firstName,
-			lastName: lastName,
-		});
-		const passwordHash = await hash('123456', 6);
+	// // seed 4 users with 'ADMINISTRADOR' profile
+	// const adminProfile = await prisma.profile.findUnique({
+	// 	where: {
+	// 		name: 'ADMINISTRADOR',
+	// 	},
+	// 	select: {
+	// 		id: true,
+	// 	},
+	// });
 
-		await prisma.user.create({
-			data: {
-				name,
-				email,
-				passwordHash: passwordHash,
-				profileId: employeeProfile.id,
-			},
-		});
-	}
+	// if (!adminProfile) {
+	// 	console.error("⚠️ No 'ADMINISTRADOR' profile in database");
+	// 	throw new Error("No 'ADMINISTRADOR' profile in database");
+	// }
 
-	// seed 4 users with 'DOCTOR' profile
-	const doctorProfile = await prisma.profile.findUnique({
-		where: {
-			name: 'DOCTOR',
-		},
-		select: {
-			id: true,
-		},
-	});
+	// for (let i = 0; i < 4; i++) {
+	// 	const firstName = fakerPT_PT.person.firstName();
+	// 	const lastName = fakerPT_PT.person.lastName();
+	// 	const name = `${firstName} ${lastName}`;
+	// 	const email = faker.internet.exampleEmail({
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 	});
+	// 	const passwordHash = await hash('123456', 6);
 
-	if (!doctorProfile) {
-		console.error("⚠️ No 'DOCTOR' profile in database");
-		throw new Error("No 'DOCTOR' profile in database");
-	}
+	// 	await prisma.user.create({
+	// 		data: {
+	// 			name,
+	// 			email,
+	// 			passwordHash: passwordHash,
+	// 			profileId: adminProfile.id,
+	// 		},
+	// 	});
+	// }
 
-	for (let i = 0; i < 4; i++) {
-		const firstName = fakerPT_PT.person.firstName();
-		const lastName = fakerPT_PT.person.lastName();
-		const name = `${firstName} ${lastName}`;
-		const email = faker.internet.exampleEmail({
-			firstName: firstName,
-			lastName: lastName,
-		});
-		const passwordHash = await hash('123456', 6);
-		const photoUrl = faker.internet.avatar();
-		const birthDate = faker.date.birthdate({ min: 25, max: 67, mode: 'age' });
-		const phone = fakerPT_PT.phone.number();
-		const licenseNumber = faker.string.numeric(12);
-		const licenseExpiryDate = faker.date.future({ years: 10 });
-		const gender = faker.person.sex().toUpperCase();
+	// // seed 4 users with 'COLABORADOR' profile
+	// const employeeProfile = await prisma.profile.findUnique({
+	// 	where: {
+	// 		name: 'COLABORADOR',
+	// 	},
+	// 	select: {
+	// 		id: true,
+	// 	},
+	// });
 
-		if (gender !== 'MALE' && gender !== 'FEMALE') {
-			return;
-		}
+	// if (!employeeProfile) {
+	// 	console.error("⚠️ No 'COLABORADOR' profile in database");
+	// 	throw new Error("No 'COLABORADOR' profile in database");
+	// }
 
-		await prisma.user.create({
-			data: {
-				name,
-				email,
-				passwordHash: passwordHash,
-				profileId: doctorProfile.id,
-				doctors: {
-					create: {
-						gender,
-						photoUrl,
-						birthDate,
-						phone,
-						licenseNumber,
-						licenseExpiryDate,
-					},
-				},
-			},
-		});
-	}
+	// for (let i = 0; i < 4; i++) {
+	// 	const firstName = fakerPT_PT.person.firstName();
+	// 	const lastName = fakerPT_PT.person.lastName();
+	// 	const name = `${firstName} ${lastName}`;
+	// 	const email = faker.internet.exampleEmail({
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 	});
+	// 	const passwordHash = await hash('123456', 6);
 
-	// seed 6 schedules to each doctor
-	const doctors = await prisma.doctor.findMany();
+	// 	await prisma.user.create({
+	// 		data: {
+	// 			name,
+	// 			email,
+	// 			passwordHash: passwordHash,
+	// 			profileId: employeeProfile.id,
+	// 		},
+	// 	});
+	// }
 
-	await Promise.all(
-		doctors.map(async (doctor) => {
-			let isScheduled = false;
+	// // seed 4 users with 'MEDICO' profile
+	// const doctorProfile = await prisma.profile.findUnique({
+	// 	where: {
+	// 		name: 'MEDICO',
+	// 	},
+	// 	select: {
+	// 		id: true,
+	// 	},
+	// });
 
-			for (let i = 0; i < 6; i++) {
-				let fakerDate = faker.date.soon({ days: 7 });
-				fakerDate.setHours(i + 9, 0, 0, 0);
-				let date = dayjs(fakerDate).toDate();
-				let startTime = dayjs(fakerDate).toDate();
-				let endTime = dayjs(fakerDate).add(30, 'minute').toDate();
-				isScheduled = !isScheduled;
+	// if (!doctorProfile) {
+	// 	console.error("⚠️ No 'MEDICO' profile in database");
+	// 	throw new Error("No 'MEDICO' profile in database");
+	// }
 
-				await prisma.doctorSchedule.create({
-					data: {
-						date,
-						startTime,
-						endTime,
-						isScheduled,
-						doctorId: doctor.id,
-					},
-				});
-			}
-		})
-	);
+	// for (let i = 0; i < 4; i++) {
+	// 	const firstName = fakerPT_PT.person.firstName();
+	// 	const lastName = fakerPT_PT.person.lastName();
+	// 	const name = `${firstName} ${lastName}`;
+	// 	const email = faker.internet.exampleEmail({
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 	});
+	// 	const passwordHash = await hash('123456', 6);
+	// 	const photoUrl = faker.internet.avatar();
+	// 	const birthDate = faker.date.birthdate({ min: 25, max: 67, mode: 'age' });
+	// 	const phone = fakerPT_PT.phone.number();
+	// 	const licenseNumber = faker.string.numeric(12);
+	// 	const licenseExpiryDate = faker.date.future({ years: 10 });
+	// 	const gender = faker.person.sex().toUpperCase();
 
-	// seed 4 users with 'PATIENT' profile
-	const patientProfile = await prisma.profile.findUnique({
-		where: {
-			name: 'PATIENT',
-		},
-		select: {
-			id: true,
-		},
-	});
+	// 	if (gender !== 'MALE' && gender !== 'FEMALE') {
+	// 		return;
+	// 	}
 
-	if (!patientProfile) {
-		console.error("⚠️ No 'PATIENT' profile in database");
-		throw new Error("No 'PATIENT' profile in database");
-	}
+	// 	await prisma.user.create({
+	// 		data: {
+	// 			name,
+	// 			email,
+	// 			passwordHash: passwordHash,
+	// 			profileId: doctorProfile.id,
+	// 			doctors: {
+	// 				create: {
+	// 					gender,
+	// 					photoUrl,
+	// 					birthDate,
+	// 					phone,
+	// 					licenseNumber,
+	// 					licenseExpiryDate,
+	// 				},
+	// 			},
+	// 		},
+	// 	});
+	// }
 
-	for (let i = 0; i < 4; i++) {
-		const firstName = fakerPT_PT.person.firstName();
-		const lastName = fakerPT_PT.person.lastName();
-		const name = `${firstName} ${lastName}`;
-		const email = faker.internet.exampleEmail({
-			firstName: firstName,
-			lastName: lastName,
-		});
-		const passwordHash = await hash('123456', 6);
-		const birthDate = faker.date.birthdate({ min: 0, max: 85, mode: 'age' });
-		const address = `${fakerPT_PT.location.streetAddress(
-			true
-		)}, ${fakerPT_PT.location.zipCode()} - ${fakerPT_PT.location.city()}`;
-		const phone = fakerPT_PT.phone.number();
-		const insuranceProvider = fakerPT_PT.company.name();
-		const insurance_policy_number = faker.string.numeric(12);
-		const gender = faker.person.sex().toUpperCase();
+	// // seed 6 schedules to each doctor
+	// const doctors = await prisma.doctor.findMany();
 
-		if (gender !== 'MALE' && gender !== 'FEMALE') {
-			return;
-		}
+	// await Promise.all(
+	// 	doctors.map(async (doctor) => {
+	// 		let isScheduled = false;
 
-		await prisma.user.create({
-			data: {
-				name,
-				email,
-				passwordHash,
-				profileId: patientProfile.id,
-				patients: {
-					create: {
-						gender,
-						birthDate,
-						address,
-						phone,
-						insuranceProvider,
-						insurance_policy_number,
-					},
-				},
-			},
-		});
-	}
+	// 		for (let i = 0; i < 6; i++) {
+	// 			let fakerDate = faker.date.soon({ days: 7 });
+	// 			fakerDate.setHours(i + 9, 0, 0, 0);
+	// 			let date = dayjs(fakerDate).toDate();
+	// 			let startTime = dayjs(fakerDate).toDate();
+	// 			let endTime = dayjs(fakerDate).add(30, 'minute').toDate();
+
+	// 			await prisma.doctorSchedule.create({
+	// 				data: {
+	// 					date,
+	// 					startTime,
+	// 					endTime,
+	// 					isScheduled,
+	// 					doctorId: doctor.id,
+	// 				},
+	// 			});
+	// 		}
+	// 	})
+	// );
+
+	// // seed 4 users with 'PACIENTE' profile
+	// const patientProfile = await prisma.profile.findUnique({
+	// 	where: {
+	// 		name: 'PACIENTE',
+	// 	},
+	// 	select: {
+	// 		id: true,
+	// 	},
+	// });
+
+	// if (!patientProfile) {
+	// 	console.error("⚠️ No 'PACIENTE' profile in database");
+	// 	throw new Error("No 'PACIENTE' profile in database");
+	// }
+
+	// for (let i = 0; i < 4; i++) {
+	// 	const firstName = fakerPT_PT.person.firstName();
+	// 	const lastName = fakerPT_PT.person.lastName();
+	// 	const name = `${firstName} ${lastName}`;
+	// 	const email = faker.internet.exampleEmail({
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 	});
+	// 	const passwordHash = await hash('123456', 6);
+	// 	const birthDate = faker.date.birthdate({ min: 0, max: 85, mode: 'age' });
+	// 	const address = `${fakerPT_PT.location.streetAddress(
+	// 		true
+	// 	)}, ${fakerPT_PT.location.zipCode()} - ${fakerPT_PT.location.city()}`;
+	// 	const phone = fakerPT_PT.phone.number();
+	// 	const insuranceProvider = fakerPT_PT.company.name();
+	// 	const insurance_policy_number = faker.string.numeric(12);
+	// 	const gender = faker.person.sex().toUpperCase();
+
+	// 	if (gender !== 'MALE' && gender !== 'FEMALE') {
+	// 		return;
+	// 	}
+
+	// 	await prisma.user.create({
+	// 		data: {
+	// 			name,
+	// 			email,
+	// 			passwordHash,
+	// 			profileId: patientProfile.id,
+	// 			patients: {
+	// 				create: {
+	// 					gender,
+	// 					birthDate,
+	// 					address,
+	// 					phone,
+	// 					insuranceProvider,
+	// 					insurance_policy_number,
+	// 				},
+	// 			},
+	// 		},
+	// 	});
+	// }
 }
 
 seeder()
