@@ -30,7 +30,7 @@ Plataforma de gestão para clínica médica
 
 - Por defeito, a BD é inicializada com os perfis de utilizador base (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`) e um _superuser_ com perfil de _ADMINISTRADOR_:
   - Nome: superuser
-  - Email: superuser@example.com
+  - Email: <superuser@example.com>
   - Senha: 123456
 
 #### Requisitos funcionais
@@ -47,8 +47,9 @@ Plataforma de gestão para clínica médica
 
 - [ ] O utilizador não pode registar-se com um e-mail duplicado;
 - [ ] A password do utilizador deve ter um mínimo de 6 caracteres;
+- [ ] Caso não venha no pedido o tipo de perfil do utilizador (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`), por defeito é criado um utilizador com perfil de _PACIENTE_;
 - [ ] Apenas utilizadores com o perfil _ADMINISTRADOR_ podem registar outros utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_;
-- [ ] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _DOCTOR_;
+- [ ] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _MEDICO_;
 - [ ] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
 - [ ] Uma consulta só pode ser marcada para uma data no futuro, desde que a data esteja livre para o médico escolhido;
 

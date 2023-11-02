@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { faker, fakerPT_PT } from '@faker-js/faker';
 import { hash } from 'bcryptjs';
+import { faker, fakerPT_PT } from '@faker-js/faker';
 import dayjs from 'dayjs';
 
 const prisma = new PrismaClient();
