@@ -49,9 +49,7 @@ export class RegisterUseCase {
 			return { user };
 		}
 
-		const profileExists = await this.usersRepository.getProfile(
-			profileName.trim().toUpperCase()
-		);
+		const profileExists = await this.usersRepository.getProfile(profileName);
 
 		if (!profileExists) {
 			throw new ProfileNameInvalidError(profileName);

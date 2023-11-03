@@ -51,6 +51,8 @@ export class InMemoryUsersRepository implements UsersRepository {
 	}
 
 	async getProfile(name: string) {
+		name = name.trim().toUpperCase();
+
 		const profile = this.profiles.find((item) => item.name === name);
 
 		if (!profile) {

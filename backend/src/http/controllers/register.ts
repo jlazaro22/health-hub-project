@@ -4,11 +4,12 @@ import z from 'zod';
 import { RegisterUseCase } from '@/use-cases/register';
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error';
 import { ProfileNameInvalidError } from '@/use-cases/errors/profile-name-invalid-error';
+import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case';
 
 export async function register(req: FastifyRequest, rep: FastifyReply) {
 	const registerBodySchema = z.object({
 		name: z.string(),
-		email: z.string(),
+		email: z.string().email(),
 		password: z.string().min(6),
 		profileName: z.string().optional(),
 	});
@@ -18,8 +19,7 @@ export async function register(req: FastifyRequest, rep: FastifyReply) {
 	);
 
 	try {
-		const usersRepository = new PrismaUsersRepository();
-		const registerUseCase = new RegisterUseCase(usersRepository);
+		const registerUseCase = makeRegisterUseCase();
 		await registerUseCase.execute({ name, email, password, profileName });
 	} catch (err) {
 		if (err instanceof UserAlreadyExistsError) {

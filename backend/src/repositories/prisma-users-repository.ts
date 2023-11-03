@@ -19,6 +19,8 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async getProfile(name: string) {
+		name = name.trim().toUpperCase();
+
 		const profile = await prisma.profile.findUnique({
 			where: {
 				name,
