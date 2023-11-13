@@ -1,26 +1,26 @@
-import { Prisma, Profile, User } from '@prisma/client';
+import { Prisma, Role, User } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { UsersRepository } from '../users-repository';
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public users: User[] = [];
-	public profiles: Profile[] = [];
+	public roles: Role[] = [];
 
 	constructor() {
-		const profileNames: string[] = [
+		const roleNames: string[] = [
 			'ADMINISTRADOR',
 			'COLABORADOR',
 			'MEDICO',
 			'PACIENTE',
 		];
 
-		profileNames.map((name) => {
-			let profile = {
+		roleNames.map((name) => {
+			let role = {
 				id: randomUUID(),
 				name,
 			};
 
-			this.profiles.push(profile);
+			this.roles.push(role);
 		});
 	}
 
@@ -52,7 +52,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 			passwordHash: data.passwordHash,
 			createdAt: new Date(),
 			updatedAt: new Date(),
-			profileId: data.profileId,
+			roleId: data.roleId,
 		};
 
 		this.users.push(user);
@@ -60,15 +60,15 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async getProfile(name: string) {
+	async getRole(name: string) {
 		name = name.trim().toUpperCase();
 
-		const profile = this.profiles.find((item) => item.name === name);
+		const role = this.roles.find((item) => item.name === name);
 
-		if (!profile) {
+		if (!role) {
 			return null;
 		}
 
-		return profile;
+		return role;
 	}
 }

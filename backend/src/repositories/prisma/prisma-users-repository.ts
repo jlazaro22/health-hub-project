@@ -5,6 +5,13 @@ import { UsersRepository } from '../users-repository';
 export class PrismaUsersRepository implements UsersRepository {
 	async findById(id: string) {
 		const user = await prisma.user.findUnique({
+			include: {
+				role: {
+					select: {
+						name: true,
+					},
+				},
+			},
 			where: {
 				id,
 			},
@@ -29,15 +36,15 @@ export class PrismaUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async getProfile(name: string) {
+	async getRole(name: string) {
 		name = name.trim().toUpperCase();
 
-		const profile = await prisma.profile.findUnique({
+		const role = await prisma.role.findUnique({
 			where: {
 				name,
 			},
 		});
 
-		return profile;
+		return role;
 	}
 }

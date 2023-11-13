@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 const prisma = new PrismaClient();
 
 async function seeder() {
-	// ? These default profiles must exist in table 'profiles' from the beginning: 'ADMINISTRADOR', 'COLABORADOR', 'MEDICO', 'PACIENTE' //
+	// ? These default roles must exist in table 'roles' from the beginning: 'ADMINISTRADOR', 'COLABORADOR', 'MEDICO', 'PACIENTE' //
 
-	const profileNames: string[] = [
+	const roleNames: string[] = [
 		'ADMINISTRADOR',
 		'COLABORADOR',
 		'MEDICO',
@@ -16,8 +16,8 @@ async function seeder() {
 	];
 
 	await Promise.all(
-		profileNames.map(async (name) => {
-			await prisma.profile.create({
+		roleNames.map(async (name) => {
+			await prisma.role.create({
 				data: {
 					name,
 				},
@@ -25,8 +25,8 @@ async function seeder() {
 		})
 	);
 
-	// Register the superuser 'ADMINISTRADOR' profile
-	const adminProfile = await prisma.profile.findUnique({
+	// Register the superuser 'ADMINISTRADOR' role
+	const adminRole = await prisma.role.findUnique({
 		where: {
 			name: 'ADMINISTRADOR',
 		},
@@ -35,9 +35,9 @@ async function seeder() {
 		},
 	});
 
-	if (!adminProfile) {
-		console.error("⚠️ No 'ADMINISTRADOR' profile in database");
-		throw new Error("No 'ADMINISTRADOR' profile in database");
+	if (!adminRole) {
+		console.error("⚠️ No 'ADMINISTRADOR' role in database");
+		throw new Error("No 'ADMINISTRADOR' role in database");
 	}
 
 	const name = 'superuser';
@@ -49,14 +49,14 @@ async function seeder() {
 			name,
 			email,
 			passwordHash: passwordHash,
-			profileId: adminProfile.id,
+			roleId: adminRole.id,
 		},
 	});
 
 	// ? comment/un-comment to seed or not the other tables //
 
-	// // seed 4 users with 'ADMINISTRADOR' profile
-	// const adminProfile = await prisma.profile.findUnique({
+	// // seed 4 users with 'ADMINISTRADOR' role
+	// const adminRole = await prisma.role.findUnique({
 	// 	where: {
 	// 		name: 'ADMINISTRADOR',
 	// 	},
@@ -65,9 +65,9 @@ async function seeder() {
 	// 	},
 	// });
 
-	// if (!adminProfile) {
-	// 	console.error("⚠️ No 'ADMINISTRADOR' profile in database");
-	// 	throw new Error("No 'ADMINISTRADOR' profile in database");
+	// if (!adminRole) {
+	// 	console.error("⚠️ No 'ADMINISTRADOR' role in database");
+	// 	throw new Error("No 'ADMINISTRADOR' role in database");
 	// }
 
 	// for (let i = 0; i < 4; i++) {
@@ -85,13 +85,13 @@ async function seeder() {
 	// 			name,
 	// 			email,
 	// 			passwordHash: passwordHash,
-	// 			profileId: adminProfile.id,
+	// 			roleId: adminRole.id,
 	// 		},
 	// 	});
 	// }
 
-	// // seed 4 users with 'COLABORADOR' profile
-	// const employeeProfile = await prisma.profile.findUnique({
+	// // seed 4 users with 'COLABORADOR' role
+	// const employeeRole = await prisma.role.findUnique({
 	// 	where: {
 	// 		name: 'COLABORADOR',
 	// 	},
@@ -100,9 +100,9 @@ async function seeder() {
 	// 	},
 	// });
 
-	// if (!employeeProfile) {
-	// 	console.error("⚠️ No 'COLABORADOR' profile in database");
-	// 	throw new Error("No 'COLABORADOR' profile in database");
+	// if (!employeeRole) {
+	// 	console.error("⚠️ No 'COLABORADOR' role in database");
+	// 	throw new Error("No 'COLABORADOR' role in database");
 	// }
 
 	// for (let i = 0; i < 4; i++) {
@@ -120,13 +120,13 @@ async function seeder() {
 	// 			name,
 	// 			email,
 	// 			passwordHash: passwordHash,
-	// 			profileId: employeeProfile.id,
+	// 			roleId: employeeRole.id,
 	// 		},
 	// 	});
 	// }
 
-	// // seed 4 users with 'MEDICO' profile
-	// const doctorProfile = await prisma.profile.findUnique({
+	// // seed 4 users with 'MEDICO' role
+	// const doctorRole = await prisma.role.findUnique({
 	// 	where: {
 	// 		name: 'MEDICO',
 	// 	},
@@ -135,9 +135,9 @@ async function seeder() {
 	// 	},
 	// });
 
-	// if (!doctorProfile) {
-	// 	console.error("⚠️ No 'MEDICO' profile in database");
-	// 	throw new Error("No 'MEDICO' profile in database");
+	// if (!doctorRole) {
+	// 	console.error("⚠️ No 'MEDICO' role in database");
+	// 	throw new Error("No 'MEDICO' role in database");
 	// }
 
 	// for (let i = 0; i < 4; i++) {
@@ -165,7 +165,7 @@ async function seeder() {
 	// 			name,
 	// 			email,
 	// 			passwordHash: passwordHash,
-	// 			profileId: doctorProfile.id,
+	// 			roleId: doctorRole.id,
 	// 			doctors: {
 	// 				create: {
 	// 					gender,
@@ -207,8 +207,8 @@ async function seeder() {
 	// 	})
 	// );
 
-	// // seed 4 users with 'PACIENTE' profile
-	// const patientProfile = await prisma.profile.findUnique({
+	// // seed 4 users with 'PACIENTE' role
+	// const patientRole = await prisma.role.findUnique({
 	// 	where: {
 	// 		name: 'PACIENTE',
 	// 	},
@@ -217,9 +217,9 @@ async function seeder() {
 	// 	},
 	// });
 
-	// if (!patientProfile) {
-	// 	console.error("⚠️ No 'PACIENTE' profile in database");
-	// 	throw new Error("No 'PACIENTE' profile in database");
+	// if (!patientRole) {
+	// 	console.error("⚠️ No 'PACIENTE' role in database");
+	// 	throw new Error("No 'PACIENTE' role in database");
 	// }
 
 	// for (let i = 0; i < 4; i++) {
@@ -249,7 +249,7 @@ async function seeder() {
 	// 			name,
 	// 			email,
 	// 			passwordHash,
-	// 			profileId: patientProfile.id,
+	// 			roleId: patientRole.id,
 	// 			patients: {
 	// 				create: {
 	// 					gender,

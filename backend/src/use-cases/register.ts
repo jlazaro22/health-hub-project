@@ -1,14 +1,14 @@
 import { hash } from 'bcryptjs';
 import { UsersRepository } from '@/repositories/users-repository';
 import { UserAlreadyExistsError } from './errors/user-already-exists-error';
-import { ProfileNameInvalidError } from './errors/profile-name-invalid-error';
+import { RoleNameInvalidError } from './errors/role-name-invalid-error';
 import { User } from '@prisma/client';
 
 interface RegisterUseCaseRequest {
 	name: string;
 	email: string;
 	password: string;
-	profileName?: string;
+	role?: string;
 }
 
 interface RegisterUseCaseResponse {
@@ -22,7 +22,7 @@ export class RegisterUseCase {
 		name,
 		email,
 		password,
-		profileName,
+		role,
 	}: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
 		const emailExists = await this.usersRepository.findByEmail(email);
 
@@ -32,34 +32,34 @@ export class RegisterUseCase {
 
 		const passwordHash = await hash(password, 6);
 
-		if (!profileName) {
-			const patientProfile = await this.usersRepository.getProfile('PACIENTE');
+		if (!role) {
+			const patientRole = await this.usersRepository.getRole('PACIENTE');
 
-			if (!patientProfile) {
-				throw new ProfileNameInvalidError(patientProfile);
+			if (!patientRole) {
+				throw new RoleNameInvalidError(patientRole);
 			}
 
 			const user = await this.usersRepository.create({
 				name,
 				email,
 				passwordHash,
-				profileId: patientProfile.id,
+				roleId: patientRole.id,
 			});
 
 			return { user };
 		}
 
-		const profileExists = await this.usersRepository.getProfile(profileName);
+		const roleExists = await this.usersRepository.getRole(role);
 
-		if (!profileExists) {
-			throw new ProfileNameInvalidError(profileName);
+		if (!roleExists) {
+			throw new RoleNameInvalidError(role);
 		}
 
 		const user = await this.usersRepository.create({
 			name,
 			email,
 			passwordHash,
-			profileId: profileExists.id,
+			roleId: roleExists.id,
 		});
 
 		return { user };

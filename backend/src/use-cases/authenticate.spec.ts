@@ -15,9 +15,9 @@ describe('Authenticate Use Case', () => {
 	});
 
 	it('should be able to authenticate', async () => {
-		const patientProfile = await usersRepository.getProfile('paciente');
+		const patientRole = await usersRepository.getRole('paciente');
 
-		if (!patientProfile) {
+		if (!patientRole) {
 			throw new ResourceNotFoundError();
 		}
 
@@ -25,7 +25,7 @@ describe('Authenticate Use Case', () => {
 			name: 'John Smith',
 			email: 'jsmith@example.com',
 			passwordHash: await hash('123456', 6),
-			profileId: patientProfile.id,
+			roleId: patientRole.id,
 		});
 
 		const { user } = await sut.execute({
@@ -43,9 +43,9 @@ describe('Authenticate Use Case', () => {
 	});
 
 	it('should not be able to authenticate with wrong password', async () => {
-		const patientProfile = await usersRepository.getProfile('paciente');
+		const patientRole = await usersRepository.getRole('paciente');
 
-		if (!patientProfile) {
+		if (!patientRole) {
 			throw new ResourceNotFoundError();
 		}
 
@@ -53,7 +53,7 @@ describe('Authenticate Use Case', () => {
 			name: 'John Smith',
 			email: 'jsmith@example.com',
 			passwordHash: await hash('123456', 6),
-			profileId: patientProfile.id,
+			roleId: patientRole.id,
 		});
 
 		await expect(() =>

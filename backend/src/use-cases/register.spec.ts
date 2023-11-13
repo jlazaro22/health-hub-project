@@ -3,7 +3,7 @@ import { RegisterUseCase } from './register';
 import { compare } from 'bcryptjs';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
 import { UserAlreadyExistsError } from './errors/user-already-exists-error';
-import { ProfileNameInvalidError } from './errors/profile-name-invalid-error';
+import { RoleNameInvalidError } from './errors/role-name-invalid-error';
 
 let usersRepository: InMemoryUsersRepository;
 let sut: RegisterUseCase;
@@ -54,16 +54,16 @@ describe('RegisterUseCase', () => {
 		}).rejects.toBeInstanceOf(UserAlreadyExistsError);
 	});
 
-	it('should only be registered with a valid profileId', async () => {
-		const profileName = 'invalidProfileName';
+	it('should only be registered with a valid role name', async () => {
+		const role = 'invalidRoleName';
 
 		await expect(() => {
 			return sut.execute({
 				name: 'John Smith',
 				email: 'jsmith@example.com',
 				password: '123456',
-				profileName,
+				role,
 			});
-		}).rejects.toBeInstanceOf(ProfileNameInvalidError);
+		}).rejects.toBeInstanceOf(RoleNameInvalidError);
 	});
 });
