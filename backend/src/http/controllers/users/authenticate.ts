@@ -1,5 +1,6 @@
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error';
 import { makeAuthenticateUseCase } from '@/use-cases/factories/make-authenticate-use-case';
+import { makeGetRoleUseCase } from '@/use-cases/factories/make-get-role-use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
 
@@ -15,8 +16,13 @@ export async function authenticate(req: FastifyRequest, rep: FastifyReply) {
 		const authenticateUseCase = makeAuthenticateUseCase();
 		const { user } = await authenticateUseCase.execute({ email, password });
 
+		const getRoleUseCase = makeGetRoleUseCase();
+		const { role } = await getRoleUseCase.execute({ id: user.roleId });
+
 		const token = await rep.jwtSign(
-			{},
+			{
+				roleName: role.name,
+			},
 			{
 				sign: {
 					sub: user.id,
@@ -25,7 +31,9 @@ export async function authenticate(req: FastifyRequest, rep: FastifyReply) {
 		);
 
 		const refreshToken = await rep.jwtSign(
-			{},
+			{
+				roleName: role.name,
+			},
 			{
 				sign: {
 					sub: user.id,

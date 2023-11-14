@@ -1,28 +1,28 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-export async function refresh(request: FastifyRequest, reply: FastifyReply) {
-	await request.jwtVerify({ onlyCookie: true });
+export async function refresh(req: FastifyRequest, rep: FastifyReply) {
+	await req.jwtVerify({ onlyCookie: true });
 
-	const token = await reply.jwtSign(
-		{},
+	const token = await rep.jwtSign(
+		{ roleName: req.user.roleName },
 		{
 			sign: {
-				sub: request.user.sub,
+				sub: req.user.sub,
 			},
 		}
 	);
 
-	const refreshToken = await reply.jwtSign(
-		{},
+	const refreshToken = await rep.jwtSign(
+		{ roleName: req.user.roleName },
 		{
 			sign: {
-				sub: request.user.sub,
+				sub: req.user.sub,
 				expiresIn: '20m',
 			},
 		}
 	);
 
-	return reply
+	return rep
 		.setCookie('refreshToken', refreshToken, {
 			path: '/',
 			secure: true,

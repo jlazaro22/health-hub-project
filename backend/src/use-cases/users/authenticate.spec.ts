@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { hash } from 'bcryptjs';
 import { AuthenticateUseCase } from './authenticate';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
-import { InvalidCredentialsError } from './errors/invalid-credentials-error';
-import { ResourceNotFoundError } from './errors/resource-not-found-error';
+import { InvalidCredentialsError } from '../errors/invalid-credentials-error';
+import { ResourceNotFoundError } from '../errors/resource-not-found-error';
 
 let usersRepository: InMemoryUsersRepository;
 let sut: AuthenticateUseCase;

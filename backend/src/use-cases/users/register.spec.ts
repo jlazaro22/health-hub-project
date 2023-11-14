@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { RegisterUseCase } from './register';
 import { compare } from 'bcryptjs';
 import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository';
-import { UserAlreadyExistsError } from './errors/user-already-exists-error';
-import { RoleNameInvalidError } from './errors/role-name-invalid-error';
+import { UserAlreadyExistsError } from '../errors/user-already-exists-error';
+import { RoleNameInvalidError } from '../errors/role-name-invalid-error';
 
 let usersRepository: InMemoryUsersRepository;
 let sut: RegisterUseCase;

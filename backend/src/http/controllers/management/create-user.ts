@@ -9,13 +9,14 @@ export async function register(req: FastifyRequest, rep: FastifyReply) {
 		name: z.string(),
 		email: z.string().email(),
 		password: z.string().min(6),
+		role: z.string().optional(),
 	});
 
-	const { name, email, password } = registerBodySchema.parse(req.body);
+	const { name, email, password, role } = registerBodySchema.parse(req.body);
 
 	try {
 		const registerUseCase = makeRegisterUseCase();
-		await registerUseCase.execute({ name, email, password });
+		await registerUseCase.execute({ name, email, password, role });
 	} catch (err) {
 		if (err instanceof UserAlreadyExistsError) {
 			return rep.status(409).send();
