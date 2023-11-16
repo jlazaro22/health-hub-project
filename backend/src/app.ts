@@ -5,6 +5,7 @@ import { env } from './env';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
 import { rolesRoutes } from './http/controllers/roles/routes';
+import { managementRoutes } from './http/controllers/management/routes';
 
 export const app = fastify();
 
@@ -21,6 +22,9 @@ app.register(fastifyCookie);
 
 app.register(usersRoutes);
 app.register(rolesRoutes);
+app.register(managementRoutes, {
+	prefix: 'management',
+});
 
 app.setErrorHandler((err, _, rep) => {
 	if (err instanceof ZodError) {

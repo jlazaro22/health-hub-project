@@ -1,10 +1,12 @@
-import { Prisma, Role, User } from '@prisma/client';
+import { Doctor, Patient, Prisma, Role, User } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { UsersRepository } from '../users-repository';
 
 export class InMemoryUsersRepository implements UsersRepository {
 	public users: User[] = [];
 	public roles: Role[] = [];
+	public patients: Patient[] = [];
+	public doctors: Doctor[] = [];
 
 	constructor() {
 		const roleNames: string[] = [
@@ -58,6 +60,40 @@ export class InMemoryUsersRepository implements UsersRepository {
 		this.users.push(user);
 
 		return user;
+	}
+
+	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
+		const patient = {
+			id: randomUUID(),
+			gender: data.gender,
+			birthDate: new Date(data.birthDate),
+			userId: data.userId,
+			address: data.address as string | null,
+			phone: data.phone as string | null,
+			insuranceProvider: data.insuranceProvider as string | null,
+			insurancePolicyNumber: data.insurancePolicyNumber as string | null,
+		};
+
+		this.patients.push(patient);
+
+		return patient;
+	}
+
+	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
+		const doctor = {
+			id: randomUUID(),
+			userId: data.userId,
+			gender: data.gender,
+			photoUrl: data.photoUrl as string | null,
+			birthDate: data.birthDate as Date | null,
+			phone: data.phone as string | null,
+			licenseNumber: data.licenseNumber,
+			licenseExpiryDate: new Date(data.licenseExpiryDate),
+		};
+
+		this.doctors.push(doctor);
+
+		return doctor;
 	}
 
 	async getRole(name: string) {

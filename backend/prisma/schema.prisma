@@ -58,10 +58,10 @@ model Doctor {
   id                String    @id @default(cuid())
   gender            Gender
   photoUrl          String?   @map("photo_url")
-  birthDate         DateTime? @map("birth_date")
+  birthDate         DateTime? @map("birth_date") @db.Date
   phone             String?
   licenseNumber     String    @map("license_number")
-  licenseExpiryDate DateTime  @map("license_expiry_date")
+  licenseExpiryDate DateTime  @map("license_expiry_date") @db.Date
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique @map("user_id")
@@ -91,13 +91,13 @@ model DoctorSchedule {
 }
 
 model Patient {
-  id                      String   @id @default(cuid())
-  gender                  Gender
-  birthDate               DateTime @map("birth_date")
-  address                 String?
-  phone                   String?
-  insuranceProvider       String?  @map("insurance_provider")
-  insurance_policy_number String?  @map("insurance_policy_number")
+  id                    String   @id @default(cuid())
+  gender                Gender
+  birthDate             DateTime @map("birth_date") @db.Date
+  address               String?
+  phone                 String?
+  insuranceProvider     String?  @map("insurance_provider")
+  insurancePolicyNumber String?  @map("insurance_policy_number")
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique @map("user_id")

@@ -2,21 +2,111 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error';
 import { RoleNameInvalidError } from '@/use-cases/errors/role-name-invalid-error';
-import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case';
+import { makeCreateUserUseCase } from '@/use-cases/factories/make-create-user-use-case';
 
-export async function register(req: FastifyRequest, rep: FastifyReply) {
-	const registerBodySchema = z.object({
+export async function createUser(req: FastifyRequest, rep: FastifyReply) {
+	const createUserBodySchema = z.object({
 		name: z.string(),
 		email: z.string().email(),
 		password: z.string().min(6),
-		role: z.string().optional(),
+		role: z.string(),
 	});
 
-	const { name, email, password, role } = registerBodySchema.parse(req.body);
+	const { name, email, password, role } = createUserBodySchema.parse(req.body);
+	const loggedUserRole = req.user.roleName;
+
+	const roleNormalized = role.trim().toUpperCase();
 
 	try {
-		const registerUseCase = makeRegisterUseCase();
-		await registerUseCase.execute({ name, email, password, role });
+		const createUserUseCase = makeCreateUserUseCase();
+
+		if (roleNormalized === 'PACIENTE') {
+			const createPatientBodySchema = z.object({
+				gender: z.string(),
+				birthDate: z.coerce.date(),
+				address: z.string().optional(),
+				phone: z.string().optional(),
+				insuranceProvider: z.string().optional(),
+				insurancePolicyNumber: z.string().optional(),
+			});
+
+			const {
+				gender,
+				birthDate,
+				address,
+				phone,
+				insuranceProvider,
+				insurancePolicyNumber,
+			} = createPatientBodySchema.parse(req.body);
+
+			await createUserUseCase.execute(
+				{
+					name,
+					email,
+					password,
+					role,
+					loggedUserRole,
+				},
+				{
+					gender,
+					birthDate,
+					address,
+					phone,
+					insuranceProvider,
+					insurancePolicyNumber,
+				},
+				undefined
+			);
+		}
+
+		if (roleNormalized === 'MEDICO') {
+			const createDoctorBodySchema = z.object({
+				gender: z.string(),
+				photoUrl: z.string().optional(),
+				birthDate: z.coerce.date().optional(),
+				phone: z.string().optional(),
+				licenseNumber: z.string(),
+				licenseExpiryDate: z.coerce.date(),
+			});
+
+			const {
+				gender,
+				photoUrl,
+				birthDate,
+				phone,
+				licenseNumber,
+				licenseExpiryDate,
+			} = createDoctorBodySchema.parse(req.body);
+
+			await createUserUseCase.execute(
+				{
+					name,
+					email,
+					password,
+					role,
+					loggedUserRole,
+				},
+				undefined,
+				{
+					gender,
+					photoUrl,
+					birthDate,
+					phone,
+					licenseNumber,
+					licenseExpiryDate,
+				}
+			);
+		}
+
+		if (roleNormalized !== 'PACIENTE' && roleNormalized !== 'MEDICO') {
+			await createUserUseCase.execute({
+				name,
+				email,
+				password,
+				role,
+				loggedUserRole,
+			});
+		}
 	} catch (err) {
 		if (err instanceof UserAlreadyExistsError) {
 			return rep.status(409).send();

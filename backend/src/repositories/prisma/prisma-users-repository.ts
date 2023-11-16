@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { UsersRepository } from '../users-repository';
 
@@ -34,6 +34,18 @@ export class PrismaUsersRepository implements UsersRepository {
 		const user = await prisma.user.create({ data });
 
 		return user;
+	}
+
+	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
+		const patient = await prisma.patient.create({ data });
+
+		return patient;
+	}
+
+	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
+		const doctor = await prisma.doctor.create({ data });
+
+		return doctor;
 	}
 
 	async getRole(name: string) {

@@ -2,12 +2,19 @@ import { hash } from 'bcryptjs';
 import { UsersRepository } from '@/repositories/users-repository';
 import { UserAlreadyExistsError } from '../errors/user-already-exists-error';
 import { RoleNameInvalidError } from '../errors/role-name-invalid-error';
-import { User } from '@prisma/client';
+import { Gender, User } from '@prisma/client';
+import { GenderInvalidError } from '../errors/gender-invalid-error';
 
 interface RegisterUseCaseRequest {
 	name: string;
 	email: string;
 	password: string;
+	gender: string;
+	birthDate: Date;
+	address?: string;
+	phone?: string;
+	insuranceProvider?: string;
+	insurancePolicyNumber?: string;
 }
 
 interface RegisterUseCaseResponse {
@@ -21,6 +28,12 @@ export class RegisterUseCase {
 		name,
 		email,
 		password,
+		gender,
+		birthDate,
+		address,
+		phone,
+		insuranceProvider,
+		insurancePolicyNumber,
 	}: RegisterUseCaseRequest): Promise<RegisterUseCaseResponse> {
 		const emailExists = await this.usersRepository.findByEmail(email);
 
@@ -41,6 +54,30 @@ export class RegisterUseCase {
 			email,
 			passwordHash,
 			roleId: patientRole.id,
+		});
+
+		const genderNormalized = gender.trim().toUpperCase();
+		let genderEnum: Gender;
+
+		if (genderNormalized === 'MALE' || genderNormalized === 'MASCULINO') {
+			genderEnum = Gender.MASCULINO;
+		} else if (
+			genderNormalized === 'FEMALE' ||
+			genderNormalized === 'FEMININO'
+		) {
+			genderEnum = Gender.FEMININO;
+		} else {
+			throw new GenderInvalidError();
+		}
+
+		await this.usersRepository.createPatient({
+			gender: genderEnum,
+			birthDate,
+			userId: user.id,
+			address,
+			phone,
+			insuranceProvider,
+			insurancePolicyNumber,
 		});
 
 		return { user };
