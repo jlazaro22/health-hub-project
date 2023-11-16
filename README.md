@@ -20,7 +20,10 @@ Plataforma de gestão para clínica médica
 ### Backend
 
 - Instalação das dependências da aplicação
-    `npm install`
+
+  ```shell
+  npm install
+  ```
 
 - Inicialização do docker container com PostgreSQL (BD = _health-hub_ / user e password = _docker_)
     `docker compose up -d`
