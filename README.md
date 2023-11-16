@@ -26,10 +26,16 @@ Plataforma de gestão para clínica médica
   ```
 
 - Inicialização do docker container com PostgreSQL (BD = _health-hub_ / user e password = _docker_)
-    `docker compose up -d`
+
+  ```shell
+  docker compose up -d
+  ```
 
 - Correr as migrações e seeds do Prisma para a BD (**importante** ler comentário na linha 23, no ficheiro `backend/prisma/seeds/db-seed.ts`).
-  `npx prisma migrate dev`
+
+  ```shell
+  npx prisma migrate dev
+  ```
 
 - Por defeito, a BD é inicializada com os perfis de utilizador base (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`) e um _superuser_ com perfil de _ADMINISTRADOR_:
   - Nome: superuser
