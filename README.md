@@ -37,6 +37,12 @@ Plataforma de gestão para clínica médica
   npx prisma migrate dev
   ```
 
+- Correr o projecto:
+
+  ```shell
+  npm run start:dev
+  ```
+
 - Por defeito, a BD é inicializada com os perfis de utilizador base (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`) e um _superuser_ com perfil de _ADMINISTRADOR_:
   - Nome: superuser
   - Email: <superuser@example.com>
