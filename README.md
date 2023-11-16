@@ -50,8 +50,8 @@ Plataforma de gestão para clínica médica
 
 #### Requisitos funcionais
 
-- [ ] O _paciente_ deve poder registar-se e autenticar-se;
-- [ ] Permitir obter o perfil do utilizador activo;
+- [x] O _paciente_ deve poder registar-se e autenticar-se;
+- [x] Permitir obter o perfil do utilizador activo;
 - [ ] O paciente pode marcar uma consulta de forma autónoma;
 - [ ] O paciente pode consultar a sua agenda de consultas (passadas e futuras);
 - [ ] O médico pode consultar a ficha do paciente com todo o histórico;
@@ -60,17 +60,17 @@ Plataforma de gestão para clínica médica
 
 #### Regras de negócio
 
-- [ ] O utilizador não pode registar-se com um e-mail duplicado;
-- [ ] A password do utilizador deve ter um mínimo de 6 caracteres;
-- [ ] Caso não venha no pedido o tipo de perfil do utilizador (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`), por defeito é criado um utilizador com perfil de _PACIENTE_;
-- [ ] Apenas utilizadores com o perfil _ADMINISTRADOR_ podem registar outros utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_;
-- [ ] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _MEDICO_;
+- [x] O utilizador não pode registar-se com um e-mail duplicado;
+- [x] A password do utilizador deve ter um mínimo de 6 caracteres;
+- [x] Caso não venha no pedido o tipo de perfil do utilizador (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`), por defeito é criado um utilizador com perfil de _PACIENTE_;
+- [x] Apenas utilizadores com o perfil _ADMINISTRADOR_ podem registar outros utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_;
+- [x] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _MEDICO_;
 - [ ] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
 - [ ] Uma consulta só pode ser marcada para uma data no futuro, desde que a data esteja livre para o médico escolhido;
 
 #### Requisitos não funcionais
 
-- [ ] A password do utilizador vai ser criptografada;
-- [ ] Os dados da aplicação vão estar persistidos numa base de dados PostgreSQL;
+- [x] A password do utilizador vai ser criptografada;
+- [x] Os dados da aplicação vão estar persistidos numa base de dados PostgreSQL;
 - [ ] Todas as listas de dados vão ser paginadas com 20 registos por página;
-- [ ] O utilizador vai ser identificado por um JWT (JSON Web Token);
+- [x] O utilizador vai ser identificado por um JWT (JSON Web Token);
