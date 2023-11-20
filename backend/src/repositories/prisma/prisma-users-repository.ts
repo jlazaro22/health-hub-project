@@ -42,6 +42,21 @@ export class PrismaUsersRepository implements UsersRepository {
 		return patient;
 	}
 
+	async getAllDoctors() {
+		const doctors = await prisma.doctor.findMany({
+			include: {
+				user: {
+					select: {
+						name: true,
+						email: true,
+					},
+				},
+			},
+		});
+
+		return doctors;
+	}
+
 	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
 		const doctor = await prisma.doctor.create({ data });
 

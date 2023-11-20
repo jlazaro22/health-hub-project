@@ -6,7 +6,5 @@ export async function roles(req: FastifyRequest, rep: FastifyReply) {
 
 	const roles = await getAllRolesUseCase.execute();
 
-	return rep.status(200).send({
-		roles,
-	});
+	return rep.status(200).send(roles);
 }
