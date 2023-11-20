@@ -65,6 +65,7 @@ Plataforma de gestão para clínica médica
 - [x] Caso não venha no pedido o tipo de perfil do utilizador (`ADMINISTRADOR`, `COLABORADOR`, `MEDICO`,`PACIENTE`), por defeito é criado um utilizador com perfil de _PACIENTE_;
 - [x] Apenas utilizadores com o perfil _ADMINISTRADOR_ podem registar outros utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_;
 - [x] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _MEDICO_;
+- [ ] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar novas `especialidades` (_specialties_), `medicamentos` (_medicines_) e `agenda` (_schedules_) dos médicos;
 - [ ] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
 - [ ] Uma consulta só pode ser marcada para uma data no futuro, desde que a data esteja livre para o médico escolhido;
 

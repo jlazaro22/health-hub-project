@@ -1,10 +1,10 @@
 import { hash } from 'bcryptjs';
 import { UsersRepository } from '@/repositories/users-repository';
-import { UserAlreadyExistsError } from '../errors/user-already-exists-error';
-import { RoleNameInvalidError } from '../errors/role-name-invalid-error';
+import { UserAlreadyExistsError } from '../../errors/user-already-exists-error';
+import { RoleNameInvalidError } from '../../errors/role-name-invalid-error';
 import { Gender, User } from '@prisma/client';
-import { OperationNotAllowedError } from '../errors/operation-not-allowed-error';
-import { GenderInvalidError } from '../errors/gender-invalid-error';
+import { OperationNotAllowedError } from '../../errors/operation-not-allowed-error';
+import { GenderInvalidError } from '../../errors/gender-invalid-error';
 
 interface CreateUserUseCaseRequest {
 	name: string;

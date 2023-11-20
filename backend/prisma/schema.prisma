@@ -45,7 +45,7 @@ enum Gender {
 
 model Specialty {
   id          String  @id @default(cuid())
-  name        String
+  name        String  @unique
   description String?
 
   doctors      Doctor[]
@@ -128,7 +128,7 @@ model Appointment {
 
 model Medicine {
   id          String  @id @default(cuid())
-  name        String
+  name        String  @unique
   description String?
 
   appointments MedicinesOnAppointments[]
