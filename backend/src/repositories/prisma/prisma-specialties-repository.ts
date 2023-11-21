@@ -14,9 +14,11 @@ export class PrismaSpecialtiesRepository implements SpecialtiesRepository {
 	}
 
 	async findByName(name: string) {
-		const specialty = await prisma.specialty.findUnique({
+		const specialty = await prisma.specialty.findFirst({
 			where: {
-				name,
+				name: {
+					contains: name,
+				},
 			},
 		});
 
@@ -27,5 +29,11 @@ export class PrismaSpecialtiesRepository implements SpecialtiesRepository {
 		const specialty = await prisma.specialty.create({ data });
 
 		return specialty;
+	}
+
+	async getAll() {
+		const specialties = await prisma.specialty.findMany();
+
+		return specialties;
 	}
 }

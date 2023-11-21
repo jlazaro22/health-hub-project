@@ -7,6 +7,8 @@ import { createMedicine } from './medicines/create-medicine';
 import { getAllDoctors } from './users/get-all-doctors';
 import { getAllPatients } from './users/get-all-patients';
 import { getAllUsers } from './users/get-all-users';
+import { assignDoctorSpecialty } from './doctor-specialties/assign-doctor-specialty';
+import { getAllSpecialties } from './specialties/get-all-specialties';
 
 export async function managementRoutes(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt);
@@ -15,12 +17,16 @@ export async function managementRoutes(app: FastifyInstance) {
 		verifyLoggedUserRole(['ADMINISTRADOR', 'COLABORADOR'])
 	);
 
-	app.get('/users', getAllUsers);
-	app.get('/doctors', getAllDoctors);
-	app.get('/patients', getAllPatients);
 	app.post('/create-user', createUser);
+	app.get('/users', getAllUsers);
+
+	app.get('/doctors', getAllDoctors);
+	app.post('/doctors/:doctorId/doctor-specialties', assignDoctorSpecialty);
+
+	app.get('/patients', getAllPatients);
 
 	app.post('/create-specialty', createSpecialty);
+	app.get('/specialties', getAllSpecialties);
 
 	app.post('/create-medicine', createMedicine);
 }

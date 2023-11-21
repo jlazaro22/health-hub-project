@@ -48,10 +48,21 @@ model Specialty {
   name        String  @unique
   description String?
 
-  doctors      Doctor[]
-  appointments Appointment[]
+  doctors              Doctor[]
+  appointments         Appointment[]
+  SpecialtiesOnDoctors SpecialtiesOnDoctors[]
 
   @@map("specialties")
+}
+
+model SpecialtiesOnDoctors {
+  doctor      Doctor    @relation(fields: [doctorId], references: [id])
+  doctorId    String    @map("doctor_id")
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+  specialtyId String    @map("specialty_id")
+
+  @@id([doctorId, specialtyId])
+  @@map("doctor_specialties")
 }
 
 model Doctor {
@@ -66,9 +77,10 @@ model Doctor {
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique @map("user_id")
 
-  specialties  Specialty[]
-  schedules    DoctorSchedule[]
-  appointments Appointment[]
+  specialties          Specialty[]
+  schedules            DoctorSchedule[]
+  appointments         Appointment[]
+  SpecialtiesOnDoctors SpecialtiesOnDoctors[]
 
   @@map("doctors")
 }
@@ -115,9 +127,9 @@ model Appointment {
   doctor           Doctor                    @relation(fields: [doctorId], references: [id])
   doctorId         String                    @map("doctor_id")
   specialty        Specialty                 @relation(fields: [specialtyId], references: [id])
-  specialtyId      String
+  specialtyId      String                    @map("specialty_id")
   patient          Patient                   @relation(fields: [patientId], references: [id])
-  patientId        String
+  patientId        String                    @map("patient_id")
   doctorSchedule   DoctorSchedule            @relation(fields: [doctorScheduleId], references: [id])
   doctorScheduleId String                    @unique @map("doctor_schedule_id")
   medicines        MedicinesOnAppointments[]

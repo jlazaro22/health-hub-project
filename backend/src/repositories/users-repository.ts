@@ -5,10 +5,12 @@ export interface UsersRepository {
 	findByEmail(email: string): Promise<User | null>;
 	create(data: Prisma.UserUncheckedCreateInput): Promise<User>;
 	getRole(name: string): Promise<Role | null>;
-
 	getAllUsers(): Promise<User[] | null>;
-	getAllPatients(): Promise<Patient[] | null>;
+
 	createPatient(data: Prisma.PatientUncheckedCreateInput): Promise<Patient>;
-	getAllDoctors(): Promise<Doctor[] | null>;
+	getAllPatients(): Promise<Patient[] | null>;
+
+	findDoctorById(id: string): Promise<Doctor | null>;
 	createDoctor(data: Prisma.DoctorUncheckedCreateInput): Promise<Doctor>;
+	getAllDoctors(): Promise<Doctor[] | null>;
 }

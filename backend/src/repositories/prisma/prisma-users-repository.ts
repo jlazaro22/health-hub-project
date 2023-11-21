@@ -36,12 +36,6 @@ export class PrismaUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
-		const patient = await prisma.patient.create({ data });
-
-		return patient;
-	}
-
 	async getAllUsers() {
 		const users = await prisma.user.findMany({
 			include: {
@@ -56,19 +50,10 @@ export class PrismaUsersRepository implements UsersRepository {
 		return users;
 	}
 
-	async getAllDoctors() {
-		const doctors = await prisma.doctor.findMany({
-			include: {
-				user: {
-					select: {
-						name: true,
-						email: true,
-					},
-				},
-			},
-		});
+	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
+		const patient = await prisma.patient.create({ data });
 
-		return doctors;
+		return patient;
 	}
 
 	async getAllPatients() {
@@ -86,10 +71,35 @@ export class PrismaUsersRepository implements UsersRepository {
 		return patients;
 	}
 
+	async findDoctorById(id: string) {
+		const doctor = await prisma.doctor.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		return doctor;
+	}
+
 	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
 		const doctor = await prisma.doctor.create({ data });
 
 		return doctor;
+	}
+
+	async getAllDoctors() {
+		const doctors = await prisma.doctor.findMany({
+			include: {
+				user: {
+					select: {
+						name: true,
+						email: true,
+					},
+				},
+			},
+		});
+
+		return doctors;
 	}
 
 	async getRole(name: string) {
