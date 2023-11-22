@@ -8,6 +8,15 @@ export class PrismaDoctorSpecialtiesRepository
 	async findByDoctorId(id: string) {
 		const doctorSpecialties = await prisma.specialtiesOnDoctors.findMany({
 			include: {
+				doctor: {
+					select: {
+						user: {
+							select: {
+								name: true,
+							},
+						},
+					},
+				},
 				specialty: {
 					select: {
 						name: true,

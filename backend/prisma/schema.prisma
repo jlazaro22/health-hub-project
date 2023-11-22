@@ -30,8 +30,9 @@ model User {
   role   Role   @relation(fields: [roleId], references: [id])
   roleId String @map("role_id")
 
-  doctors  Doctor[]
-  patients Patient[]
+  doctors               Doctor[]
+  patients              Patient[]
+  updateDoctorSchedules DoctorSchedule[]
 
   @@map("users")
 }
@@ -96,9 +97,12 @@ model DoctorSchedule {
 
   doctor      Doctor       @relation(fields: [doctorId], references: [id])
   doctorId    String       @map("doctor_id")
+  user        User         @relation(fields: [updatedBy], references: [id])
+  updatedBy   String       @map("updated_by")
   appointment Appointment?
 
   @@id([id, doctorId, date, startTime, endTime])
+  @@unique([doctorId, date, startTime, endTime], name: "unique_doctor_schedule")
   @@map("doctor_schedules")
 }
 

@@ -24,12 +24,6 @@ export class AssignDoctorSpecialtyUseCase {
 		doctorId,
 		specialtyId,
 	}: AssignDoctorSpecialtyUseCaseRequest): Promise<AssignDoctorSpecialtyUseCaseResponse> {
-		const doctor = await this.usersRepository.findDoctorById(doctorId);
-
-		if (!doctor) {
-			throw new ResourceNotFoundError();
-		}
-
 		const specialty = await this.specialtiesRepository.findById(specialtyId);
 
 		if (!specialty) {
@@ -37,7 +31,7 @@ export class AssignDoctorSpecialtyUseCase {
 		}
 
 		const doctorSpecialty = await this.doctorSpecialtiesRepository.create({
-			doctorId: doctor.id,
+			doctorId,
 			specialtyId: specialty.id,
 		});
 
