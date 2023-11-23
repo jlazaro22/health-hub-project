@@ -89,8 +89,8 @@ model Doctor {
 model DoctorSchedule {
   id          String   @unique @default(cuid())
   date        DateTime @db.Date
-  startTime   DateTime @map("start_time") @db.Time(1)
-  endTime     DateTime @map("end_time") @db.Time(1)
+  startTime   DateTime @map("start_time")
+  endTime     DateTime @map("end_time")
   isScheduled Boolean  @default(false) @map("is_scheduled")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")

@@ -1,4 +1,4 @@
-import { Doctor, Patient, Prisma, Role, User } from '@prisma/client';
+import { $Enums, Doctor, Patient, Prisma, Role, User } from '@prisma/client';
 import { randomUUID } from 'node:crypto';
 import { UsersRepository } from '../users-repository';
 
@@ -62,6 +62,10 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
+	async getAllUsers() {
+		return this.users;
+	}
+
 	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
 		const patient = {
 			id: randomUUID(),
@@ -79,6 +83,20 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return patient;
 	}
 
+	async getAllPatients() {
+		return this.patients;
+	}
+
+	async findDoctorById(id: string) {
+		const doctor = this.doctors.find((item) => item.id === id);
+
+		if (!doctor) {
+			return null;
+		}
+
+		return doctor;
+	}
+
 	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
 		const doctor = {
 			id: randomUUID(),
@@ -94,6 +112,10 @@ export class InMemoryUsersRepository implements UsersRepository {
 		this.doctors.push(doctor);
 
 		return doctor;
+	}
+
+	async getAllDoctors() {
+		return this.doctors;
 	}
 
 	async getRole(name: string) {

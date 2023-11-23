@@ -12,6 +12,7 @@ import { getAllSpecialties } from './specialties/get-all-specialties';
 import { getDoctorSpecialties } from './doctor-specialties/get-doctor-specialties';
 import { createDoctorSchedule } from './doctor-schedules/create-doctor-schedule';
 import { getDoctorSchedules } from './doctor-schedules/get-doctor-schedules';
+import { roles } from './roles/roles';
 
 export async function managementRoutes(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt);
@@ -22,15 +23,16 @@ export async function managementRoutes(app: FastifyInstance) {
 
 	app.post('/create-user', createUser);
 	app.get('/users', getAllUsers);
+	app.get('/users/roles', roles);
 
 	app.get('/doctors', getAllDoctors);
-	app.post('/doctors/:doctorId/doctor-specialty', assignDoctorSpecialty);
-	app.get('/doctors/:doctorId/doctor-specialties', getDoctorSpecialties);
-	app.post('/doctors/:doctorId/doctor-schedule', createDoctorSchedule);
-	app.get('/doctors/:doctorId/doctor-schedules', getDoctorSchedules);
+	app.post('/doctors/:doctorId/assign-specialty', assignDoctorSpecialty);
+	app.get('/doctors/:doctorId/specialties', getDoctorSpecialties);
+	app.post('/doctors/:doctorId/add-schedule', createDoctorSchedule);
+	app.get('/doctors/:doctorId/schedules', getDoctorSchedules);
 
-	app.post('/create-specialty', createSpecialty);
 	app.get('/specialties', getAllSpecialties);
+	app.post('/specialties', createSpecialty);
 
 	app.get('/patients', getAllPatients);
 

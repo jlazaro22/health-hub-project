@@ -23,6 +23,16 @@ export class InMemoryRolesRepository implements RolesRepository {
 		});
 	}
 
+	async findById(id: string) {
+		const role = this.roles.find((item) => item.id === id);
+
+		if (!role) {
+			return null;
+		}
+
+		return role;
+	}
+
 	async getAllRoles() {
 		return this.roles;
 	}
