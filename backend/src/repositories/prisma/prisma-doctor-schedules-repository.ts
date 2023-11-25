@@ -1,10 +1,18 @@
-import { Prisma } from '@prisma/client';
+import { DoctorSchedule, Prisma } from '@prisma/client';
 import { DoctorSchedulesRepository } from '../doctor-schedules-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaDoctorSchedulesRepository
 	implements DoctorSchedulesRepository
 {
+	async findById(id: string) {
+		const doctorSchedule = await prisma.doctorSchedule.findUnique({
+			where: { id },
+		});
+
+		return doctorSchedule;
+	}
+
 	async findExistentByDoctorId(
 		doctorId: string,
 		date: Date,
@@ -43,6 +51,25 @@ export class PrismaDoctorSchedulesRepository
 		});
 
 		return doctorSchedule;
+	}
+
+	async update(data: DoctorSchedule) {
+		const doctorSchedule = await prisma.doctorSchedule.update({
+			where: {
+				id: data.id,
+			},
+			data,
+		});
+
+		return doctorSchedule;
+	}
+
+	async remove(id: string) {
+		await prisma.doctorSchedule.delete({
+			where: {
+				id,
+			},
+		});
 	}
 
 	async getAll() {

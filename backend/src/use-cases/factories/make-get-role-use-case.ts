@@ -1,5 +1,5 @@
 import { PrismaRolesRepository } from '@/repositories/prisma/prisma-roles-repository';
-import { GetRoleUseCase } from '../roles/get-role';
+import { GetRoleUseCase } from '../management/roles/get-role';
 
 export function makeGetRoleUseCase() {
 	const rolesRepository = new PrismaRolesRepository();

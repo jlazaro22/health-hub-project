@@ -68,7 +68,9 @@ Plataforma de gestão para clínica médica
 - [x] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar novas `especialidades` (_specialties_), `medicamentos` (_medicines_) e actualizar a `agenda` dos médicos (_doctor-schedules_);
 - [ ] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
 - [x] A agenda dos médicos não pode conter horários de consultas repetidos (mesmo dia e intervalo de tempo)
+- [ ] Um horário da agenda de um médico só pode ser removido da BD com data no futuro, desde que não tinha sido efectuada uma consulta nesse horário
 - [ ] Uma consulta só pode ser marcada para uma data no futuro, desde que a data esteja livre para o médico escolhido;
+- [ ] Uma consulta só pode ser removida da BD com data no futuro, consultas já efectuadas não podem ser removidas
 
 #### Requisitos não funcionais
 

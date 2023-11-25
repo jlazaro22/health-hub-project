@@ -32,6 +32,33 @@ export class PrismaDoctorSpecialtiesRepository
 		return doctorSpecialties;
 	}
 
+	async findBySpecialtyId(id: string) {
+		const doctorsBySpecialty = await prisma.specialtiesOnDoctors.findMany({
+			include: {
+				doctor: {
+					select: {
+						user: {
+							select: {
+								name: true,
+							},
+						},
+					},
+				},
+				specialty: {
+					select: {
+						name: true,
+						description: true,
+					},
+				},
+			},
+			where: {
+				specialtyId: id,
+			},
+		});
+
+		return doctorsBySpecialty;
+	}
+
 	async create(data: Prisma.SpecialtiesOnDoctorsUncheckedCreateInput) {
 		const doctorSpecialty = await prisma.specialtiesOnDoctors.create({
 			data,

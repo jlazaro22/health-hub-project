@@ -1,6 +1,6 @@
 import { PrismaDoctorSpecialtiesRepository } from '@/repositories/prisma/prisma-doctor-specialties-repository';
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository';
-import { GetDoctorSpecialtiesUseCase } from '../management/doctor-specialties/get-doctor-specialties';
+import { GetDoctorSpecialtiesUseCase } from '../doctors/get-doctor-specialties';
 
 export function makeGetDoctorSpecialtiesUseCase() {
 	const doctorSpecialtiesRepository = new PrismaDoctorSpecialtiesRepository();

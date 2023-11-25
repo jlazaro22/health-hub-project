@@ -33,6 +33,7 @@ model User {
   doctors               Doctor[]
   patients              Patient[]
   updateDoctorSchedules DoctorSchedule[]
+  updateAppointments    Appointment[]
 
   @@map("users")
 }
@@ -137,8 +138,11 @@ model Appointment {
   doctorSchedule   DoctorSchedule            @relation(fields: [doctorScheduleId], references: [id])
   doctorScheduleId String                    @unique @map("doctor_schedule_id")
   medicines        MedicinesOnAppointments[]
+  user             User                      @relation(fields: [updatedBy], references: [id])
+  updatedBy        String                    @map("updated_by")
 
   @@id([appointmentNumber, doctorId])
+  @@unique([appointmentNumber, doctorId], name: "unique_doctor_appointment")
   @@map("appointments")
 }
 

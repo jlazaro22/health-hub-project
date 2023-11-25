@@ -1,8 +1,10 @@
 import { DoctorSchedulesRepository } from '@/repositories/doctor-schedules-repository';
 import { UsersRepository } from '@/repositories/users-repository';
 import { DoctorScheduleAlreadyExistsError } from '@/use-cases/errors/doctor-schedule-already-exists-error';
+import { DoctorScheduleOutdatedError } from '@/use-cases/errors/doctor-schedule-outdated-error';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error';
 import { DoctorSchedule } from '@prisma/client';
+import dayjs from 'dayjs';
 
 interface CreateDoctorScheduleUseCaseRequest {
 	doctorId: string;
@@ -47,6 +49,12 @@ export class CreateDoctorScheduleUseCase {
 
 		if (scheduleExists) {
 			throw new DoctorScheduleAlreadyExistsError();
+		}
+
+		const outdatedSchedule = dayjs().isAfter(startTime);
+
+		if (outdatedSchedule) {
+			throw new DoctorScheduleOutdatedError();
 		}
 
 		const doctorSchedule = await this.doctorSchedulesRepository.create({
