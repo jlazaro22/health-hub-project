@@ -52,10 +52,10 @@ Plataforma de gestão para clínica médica
 
 - [x] O _paciente_ deve poder registar-se e autenticar-se;
 - [x] Permitir obter o perfil do utilizador activo;
-- [ ] O paciente pode marcar uma consulta de forma autónoma;
+- [x] O paciente pode marcar uma consulta de forma autónoma;
 - [ ] O paciente pode consultar a sua agenda de consultas (passadas e futuras);
 - [ ] O médico pode consultar a ficha do paciente com todo o histórico;
-- [ ] O médico pode consultar a sua agenda
+- [x] O médico pode consultar a sua agenda
 - [ ] O médico deve ter acesso a uma lista de fármacos que pode receitar;
 
 #### Regras de negócio
@@ -66,10 +66,10 @@ Plataforma de gestão para clínica médica
 - [x] Apenas utilizadores com o perfil _ADMINISTRADOR_ podem registar outros utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_;
 - [x] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _MEDICO_;
 - [x] Apenas utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar novas `especialidades` (_specialties_), `medicamentos` (_medicines_) e actualizar a `agenda` dos médicos (_doctor-schedules_);
-- [ ] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
+- [x] Os utilizadores com perfil _ADMINISTRADOR_ e _COLABORADOR_ podem registar utilizadores com perfil _PACIENTE_ e registar novas consultas para um paciente.
 - [x] A agenda dos médicos não pode conter horários de consultas repetidos (mesmo dia e intervalo de tempo)
-- [ ] Um horário da agenda de um médico só pode ser removido da BD com data no futuro, desde que não tinha sido efectuada uma consulta nesse horário
-- [ ] Uma consulta só pode ser marcada para uma data no futuro, desde que a data esteja livre para o médico escolhido;
+- [x] Um horário da agenda de um médico só pode ser removido da BD com data no futuro (prevenir que sejam removidos horários em que possa ter havido consultas)
+- [x] Uma consulta só pode ser marcada para uma data no futuro e desde que a data esteja livre para o médico escolhido;
 - [ ] Uma consulta só pode ser removida da BD com data no futuro, consultas já efectuadas não podem ser removidas
 
 #### Requisitos não funcionais

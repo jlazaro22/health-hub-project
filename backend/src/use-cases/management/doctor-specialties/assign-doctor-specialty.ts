@@ -16,7 +16,6 @@ interface AssignDoctorSpecialtyUseCaseResponse {
 export class AssignDoctorSpecialtyUseCase {
 	constructor(
 		private doctorSpecialtiesRepository: DoctorSpecialtiesRepository,
-		private usersRepository: UsersRepository,
 		private specialtiesRepository: SpecialtiesRepository
 	) {}
 

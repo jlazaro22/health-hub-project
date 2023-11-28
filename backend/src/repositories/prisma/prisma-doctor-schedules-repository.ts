@@ -20,7 +20,12 @@ export class PrismaDoctorSchedulesRepository
 		endTime: Date
 	) {
 		const doctorSchedule = await prisma.doctorSchedule.findFirst({
-			where: { doctorId, date, startTime, endTime },
+			where: {
+				doctorId,
+				date,
+				startTime,
+				endTime,
+			},
 		});
 
 		return doctorSchedule;
@@ -39,7 +44,9 @@ export class PrismaDoctorSchedulesRepository
 					},
 				},
 			},
-			where: { doctorId: id },
+			where: {
+				doctorId: id,
+			},
 		});
 
 		return doctorSchedules;

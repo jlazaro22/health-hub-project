@@ -13,6 +13,6 @@ export interface DoctorSchedulesRepository {
 		data: Prisma.DoctorScheduleUncheckedCreateInput
 	): Promise<DoctorSchedule>;
 	update(data: DoctorSchedule): Promise<DoctorSchedule>;
-	remove(id: string): void;
+	remove(id: string): Promise<void>;
 	getAll(): Promise<DoctorSchedule[] | null>;
 }
