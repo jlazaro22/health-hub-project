@@ -1,5 +1,7 @@
 import { DoctorScheduleAlreadyExistsError } from '@/use-cases/errors/doctor-schedule-already-exists-error';
+import { DoctorScheduleOutdatedError } from '@/use-cases/errors/doctor-schedule-outdated-error';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error';
+import { ScheduleOutsideWorkingHoursError } from '@/use-cases/errors/schedule-outside-working-hours-error';
 import { makeCreateDoctorScheduleUseCase } from '@/use-cases/factories/make-create-doctor-schedule-use-case';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import z from 'zod';
@@ -13,15 +15,11 @@ export async function createDoctorSchedule(
 	});
 
 	const createDoctorScheduleBodySchema = z.object({
-		date: z.coerce.date(),
 		startTime: z.coerce.date(),
-		endTime: z.coerce.date(),
-		isScheduled: z.boolean().default(false),
 	});
 
 	const { doctorId } = createDoctorScheduleParamsSchema.parse(req.params);
-	const { date, startTime, endTime, isScheduled } =
-		createDoctorScheduleBodySchema.parse(req.body);
+	const { startTime } = createDoctorScheduleBodySchema.parse(req.body);
 	const loggedUserId = req.user.sub;
 
 	try {
@@ -29,14 +27,15 @@ export async function createDoctorSchedule(
 
 		await createDoctorScheduleUseCase.execute({
 			doctorId,
-			date,
 			startTime,
-			endTime,
-			isScheduled,
 			updatedBy: loggedUserId,
 		});
 	} catch (err) {
-		if (err instanceof DoctorScheduleAlreadyExistsError) {
+		if (
+			err instanceof DoctorScheduleAlreadyExistsError ||
+			err instanceof DoctorScheduleOutdatedError ||
+			err instanceof ScheduleOutsideWorkingHoursError
+		) {
 			return rep.status(409).send();
 		}
 

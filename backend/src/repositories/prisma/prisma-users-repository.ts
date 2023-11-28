@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { $Enums, Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { UsersRepository } from '../users-repository';
 
@@ -48,6 +48,26 @@ export class PrismaUsersRepository implements UsersRepository {
 		});
 
 		return users;
+	}
+
+	async findPatientById(id: string) {
+		const patient = await prisma.patient.findUnique({
+			where: {
+				id,
+			},
+		});
+
+		return patient;
+	}
+
+	async findPatientByUserId(id: string) {
+		const patient = await prisma.patient.findUnique({
+			where: {
+				userId: id,
+			},
+		});
+
+		return patient;
 	}
 
 	async createPatient(data: Prisma.PatientUncheckedCreateInput) {

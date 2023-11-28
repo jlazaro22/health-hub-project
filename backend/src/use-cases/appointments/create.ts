@@ -7,13 +7,16 @@ import { DoctorSchedulesRepository } from '@/repositories/doctor-schedules-repos
 import { DoctorScheduleAlreadyTakenError } from '../errors/doctor-schedule-already-taken-error';
 import dayjs from 'dayjs';
 import { DoctorScheduleOutdatedError } from '../errors/doctor-schedule-outdated-error';
+import { OperationNotAllowedError } from '../errors/operation-not-allowed-error';
+import { AppointmentPatientNotProvidedError } from '../errors/appointment-patient-not-provided-error';
 
 interface CreateAppointmentUseCaseRequest {
 	doctorId: string;
 	specialtyId: string;
-	patientId: string;
+	patientId: string | undefined;
 	doctorScheduleId: string;
 	updatedBy: string;
+	loggedUserRole: string;
 }
 
 interface CreateAppointmentUseCaseResponse {
@@ -34,7 +37,16 @@ export class CreateAppointmentUseCase {
 		patientId,
 		doctorScheduleId,
 		updatedBy,
+		loggedUserRole,
 	}: CreateAppointmentUseCaseRequest): Promise<CreateAppointmentUseCaseResponse> {
+		if (
+			loggedUserRole !== 'PACIENTE' &&
+			loggedUserRole !== 'ADMINISTRADOR' &&
+			loggedUserRole !== 'COLABORADOR'
+		) {
+			throw new OperationNotAllowedError();
+		}
+
 		const newAppointmentNumber =
 			(await this.appointmentsRepository.countByDoctorId(doctorId)) + 1;
 
@@ -50,10 +62,28 @@ export class CreateAppointmentUseCase {
 			throw new ResourceNotFoundError();
 		}
 
-		const patient = await this.specialtiesRepository.findById(patientId);
+		let appointmentPatientId: string;
 
-		if (!patient) {
-			throw new ResourceNotFoundError();
+		if (loggedUserRole === 'PACIENTE') {
+			const patient = await this.usersRepository.findPatientByUserId(updatedBy);
+
+			if (!patient) {
+				throw new ResourceNotFoundError();
+			}
+
+			appointmentPatientId = patient.id;
+		} else {
+			if (!patientId) {
+				throw new AppointmentPatientNotProvidedError();
+			}
+
+			const patient = await this.usersRepository.findPatientById(patientId);
+
+			if (!patient) {
+				throw new ResourceNotFoundError();
+			}
+
+			appointmentPatientId = patient.id;
 		}
 
 		const doctorSchedule = await this.doctorSchedulesRepository.findById(
@@ -81,7 +111,7 @@ export class CreateAppointmentUseCase {
 			appointmentNumber: newAppointmentNumber,
 			doctorId,
 			specialtyId,
-			patientId,
+			patientId: appointmentPatientId,
 			doctorScheduleId,
 			updatedBy,
 		});

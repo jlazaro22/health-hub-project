@@ -3,15 +3,13 @@ import { UsersRepository } from '@/repositories/users-repository';
 import { DoctorScheduleAlreadyExistsError } from '@/use-cases/errors/doctor-schedule-already-exists-error';
 import { DoctorScheduleOutdatedError } from '@/use-cases/errors/doctor-schedule-outdated-error';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error';
+import { ScheduleOutsideWorkingHoursError } from '@/use-cases/errors/schedule-outside-working-hours-error';
 import { DoctorSchedule } from '@prisma/client';
 import dayjs from 'dayjs';
 
 interface CreateDoctorScheduleUseCaseRequest {
 	doctorId: string;
-	date: Date;
 	startTime: Date;
-	endTime: Date;
-	isScheduled: boolean;
 	updatedBy: string;
 }
 
@@ -27,16 +25,30 @@ export class CreateDoctorScheduleUseCase {
 
 	async execute({
 		doctorId,
-		date,
 		startTime,
-		endTime,
-		isScheduled,
 		updatedBy,
 	}: CreateDoctorScheduleUseCaseRequest): Promise<CreateDoctorScheduleUseCaseResponse> {
-		const doctor = await this.usersRepository.findDoctorById(doctorId);
+		const date = dayjs(startTime)
+			.set('hour', 0)
+			.set('minute', 0)
+			.set('second', 0)
+			.toDate();
+		const endTime = dayjs(startTime).add(30, 'minute').toDate();
 
-		if (!doctor) {
-			throw new ResourceNotFoundError();
+		const startOfWorkingDay = dayjs(date)
+			.set('hour', 9)
+			.set('minute', 0)
+			.set('second', 0);
+		const endOfWorkingDay = dayjs(date)
+			.set('hour', 18)
+			.set('minute', 0)
+			.set('second', 0);
+		const outsideWorkingHours =
+			dayjs(startTime).isBefore(startOfWorkingDay) ||
+			dayjs(startTime).add(30, 'minute').isAfter(endOfWorkingDay);
+
+		if (outsideWorkingHours) {
+			throw new ScheduleOutsideWorkingHoursError();
 		}
 
 		const scheduleExists =
@@ -57,12 +69,17 @@ export class CreateDoctorScheduleUseCase {
 			throw new DoctorScheduleOutdatedError();
 		}
 
+		const doctor = await this.usersRepository.findDoctorById(doctorId);
+
+		if (!doctor) {
+			throw new ResourceNotFoundError();
+		}
+
 		const doctorSchedule = await this.doctorSchedulesRepository.create({
 			doctorId: doctor.id,
 			date,
 			startTime,
 			endTime,
-			isScheduled,
 			updatedBy,
 		});
 

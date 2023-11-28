@@ -7,6 +7,8 @@ export interface UsersRepository {
 	getRole(name: string): Promise<Role | null>;
 	getAllUsers(): Promise<User[] | null>;
 
+	findPatientById(id: string): Promise<Patient | null>;
+	findPatientByUserId(id: string): Promise<Patient | null>;
 	createPatient(data: Prisma.PatientUncheckedCreateInput): Promise<Patient>;
 	getAllPatients(): Promise<Patient[] | null>;
 

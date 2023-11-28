@@ -1,3 +1,4 @@
+import { AppointmentPatientNotProvidedError } from '@/use-cases/errors/appointment-patient-not-provided-error';
 import { DoctorScheduleAlreadyTakenError } from '@/use-cases/errors/doctor-schedule-already-taken-error';
 import { DoctorScheduleOutdatedError } from '@/use-cases/errors/doctor-schedule-outdated-error';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error';
@@ -12,13 +13,13 @@ export async function createAppointment(
 	const createAppointmentBodySchema = z.object({
 		doctorId: z.string().cuid(),
 		specialtyId: z.string().cuid(),
-		patientId: z.string().cuid(),
+		patientId: z.string().cuid().optional(),
 		doctorScheduleId: z.string().cuid(),
 	});
 
 	const { doctorId, specialtyId, patientId, doctorScheduleId } =
 		createAppointmentBodySchema.parse(req.body);
-	const loggedUserId = req.user.sub;
+	const loggedUser = req.user;
 
 	try {
 		const createAppointmentUseCase = makeCreateAppointmentUseCase();
@@ -28,7 +29,8 @@ export async function createAppointment(
 			specialtyId,
 			patientId,
 			doctorScheduleId,
-			updatedBy: loggedUserId,
+			updatedBy: loggedUser.sub,
+			loggedUserRole: loggedUser.roleName,
 		});
 	} catch (err) {
 		if (
@@ -40,6 +42,10 @@ export async function createAppointment(
 
 		if (err instanceof ResourceNotFoundError) {
 			return rep.status(404).send();
+		}
+
+		if (err instanceof AppointmentPatientNotProvidedError) {
+			return rep.status(400).send();
 		}
 
 		throw err;
