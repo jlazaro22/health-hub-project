@@ -79,9 +79,15 @@ export class PrismaDoctorSchedulesRepository
 		});
 	}
 
-	async getAll() {
-		const doctorSchedules = await prisma.doctorSchedule.findMany();
+	async getAll(page: number) {
+		const totalItems = await prisma.doctorSchedule.count();
+		const totalPages = Math.ceil(totalItems / 10);
 
-		return doctorSchedules;
+		const doctorSchedules = await prisma.doctorSchedule.findMany({
+			take: 10,
+			skip: (page - 1) * 10,
+		});
+
+		return { data: doctorSchedules, totalPages };
 	}
 }

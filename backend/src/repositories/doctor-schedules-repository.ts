@@ -1,5 +1,10 @@
 import { DoctorSchedule, Prisma } from '@prisma/client';
 
+interface Paginable<T> {
+	data: T[];
+	totalPages: number;
+}
+
 export interface DoctorSchedulesRepository {
 	findById(id: string): Promise<DoctorSchedule | null>;
 	findExistentByDoctorId(
@@ -14,5 +19,5 @@ export interface DoctorSchedulesRepository {
 	): Promise<DoctorSchedule>;
 	update(data: DoctorSchedule): Promise<DoctorSchedule>;
 	remove(id: string): Promise<void>;
-	getAll(): Promise<DoctorSchedule[] | null>;
+	getAll(page: number): Promise<Paginable<DoctorSchedule>>;
 }

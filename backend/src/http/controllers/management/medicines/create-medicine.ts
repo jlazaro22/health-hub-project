@@ -6,14 +6,16 @@ import z from 'zod';
 export async function createMedicine(req: FastifyRequest, rep: FastifyReply) {
 	const createMedicineBodySchema = z.object({
 		name: z.string(),
+		description: z.string().optional(),
 	});
 
-	const { name } = createMedicineBodySchema.parse(req.body);
+	const { name, description } = createMedicineBodySchema.parse(req.body);
 
 	try {
 		const createMedicineUseCase = makeCreateMedicineUseCase();
 		await createMedicineUseCase.execute({
 			name,
+			description,
 		});
 	} catch (err) {
 		if (err instanceof MedicineAlreadyExistsError) {

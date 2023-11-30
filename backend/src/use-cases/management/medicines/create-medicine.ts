@@ -4,6 +4,7 @@ import { Medicine } from '@prisma/client';
 
 interface CreateMedicineUseCaseRequest {
 	name: string;
+	description: string | undefined;
 }
 
 interface CreateMedicineUseCaseResponse {
@@ -15,6 +16,7 @@ export class CreateMedicineUseCase {
 
 	async execute({
 		name,
+		description,
 	}: CreateMedicineUseCaseRequest): Promise<CreateMedicineUseCaseResponse> {
 		const medicineExists = await this.medicinesRepository.findByName(name);
 
@@ -24,6 +26,7 @@ export class CreateMedicineUseCase {
 
 		const medicine = await this.medicinesRepository.create({
 			name,
+			description,
 		});
 
 		return { medicine };

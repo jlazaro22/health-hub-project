@@ -1,16 +1,23 @@
 import { UsersRepository } from '@/repositories/users-repository';
 import { Doctor } from '@prisma/client';
 
+interface getAllDoctorsUseCaseRequest {
+	page: number;
+}
+
 interface getAllDoctorsUseCaseResponse {
-	doctors: Doctor[] | null;
+	doctors: Doctor[];
+	totalPages: number;
 }
 
 export class GetAllDoctorsUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
-	async execute(): Promise<getAllDoctorsUseCaseResponse> {
-		const doctors = await this.usersRepository.getAllDoctors();
+	async execute({
+		page,
+	}: getAllDoctorsUseCaseRequest): Promise<getAllDoctorsUseCaseResponse> {
+		const { data, totalPages } = await this.usersRepository.getAllDoctors(page);
 
-		return { doctors };
+		return { doctors: data, totalPages };
 	}
 }

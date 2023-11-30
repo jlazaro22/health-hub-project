@@ -1,4 +1,4 @@
-import { $Enums, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { UsersRepository } from '../users-repository';
 
@@ -36,7 +36,10 @@ export class PrismaUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async getAllUsers() {
+	async getAllUsers(page: number) {
+		const totalItems = await prisma.user.count();
+		const totalPages = Math.ceil(totalItems / 10);
+
 		const users = await prisma.user.findMany({
 			include: {
 				role: {
@@ -45,9 +48,11 @@ export class PrismaUsersRepository implements UsersRepository {
 					},
 				},
 			},
+			take: 10,
+			skip: (page - 1) * 10,
 		});
 
-		return users;
+		return { data: users, totalPages };
 	}
 
 	async findPatientById(id: string) {
@@ -76,7 +81,10 @@ export class PrismaUsersRepository implements UsersRepository {
 		return patient;
 	}
 
-	async getAllPatients() {
+	async getAllPatients(page: number) {
+		const totalItems = await prisma.patient.count();
+		const totalPages = Math.ceil(totalItems / 10);
+
 		const patients = await prisma.patient.findMany({
 			include: {
 				user: {
@@ -86,9 +94,11 @@ export class PrismaUsersRepository implements UsersRepository {
 					},
 				},
 			},
+			take: 10,
+			skip: (page - 1) * 10,
 		});
 
-		return patients;
+		return { data: patients, totalPages };
 	}
 
 	async findDoctorById(id: string) {
@@ -107,7 +117,10 @@ export class PrismaUsersRepository implements UsersRepository {
 		return doctor;
 	}
 
-	async getAllDoctors() {
+	async getAllDoctors(page: number) {
+		const totalItems = await prisma.doctor.count();
+		const totalPages = Math.ceil(totalItems / 10);
+
 		const doctors = await prisma.doctor.findMany({
 			include: {
 				user: {
@@ -117,9 +130,11 @@ export class PrismaUsersRepository implements UsersRepository {
 					},
 				},
 			},
+			take: 10,
+			skip: (page - 1) * 10,
 		});
 
-		return doctors;
+		return { data: doctors, totalPages };
 	}
 
 	async getRole(name: string) {
