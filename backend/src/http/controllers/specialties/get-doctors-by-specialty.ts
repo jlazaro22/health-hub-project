@@ -10,16 +10,23 @@ export async function getDoctorsBySpecialty(
 		specialtyId: z.string().cuid(),
 	});
 
+	const getDoctorsBySpecialtyQuerySchema = z.object({
+		page: z.coerce.number().min(1).default(1),
+	});
+
 	const { specialtyId } = getDoctorsBySpecialtyParamsSchema.parse(req.params);
+	const { page } = getDoctorsBySpecialtyQuerySchema.parse(req.query);
 
 	try {
 		const getDoctorsBySpecialtyUseCase = makeGetDoctorsBySpecialtyUseCase();
 
-		const doctorsBySpecialty = await getDoctorsBySpecialtyUseCase.execute({
-			specialtyId,
-		});
+		const { doctorsBySpecialty, totalPages } =
+			await getDoctorsBySpecialtyUseCase.execute({
+				specialtyId,
+				page,
+			});
 
-		return rep.status(200).send(doctorsBySpecialty);
+		return rep.status(200).send({ doctorsBySpecialty, page, totalPages });
 	} catch (err) {
 		throw err;
 	}

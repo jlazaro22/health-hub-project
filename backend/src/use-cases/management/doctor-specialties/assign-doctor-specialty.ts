@@ -1,6 +1,5 @@
 import { DoctorSpecialtiesRepository } from '@/repositories/doctor-specialties-repository';
 import { SpecialtiesRepository } from '@/repositories/specialties-repository';
-import { UsersRepository } from '@/repositories/users-repository';
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found-error';
 import { SpecialtiesOnDoctors } from '@prisma/client';
 

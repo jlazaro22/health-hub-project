@@ -3,6 +3,17 @@ import { AppointmentsRepository } from '../appointments-repository';
 import { prisma } from '@/lib/prisma';
 
 export class PrismaAppointmentsRepository implements AppointmentsRepository {
+	async findById(number: number, doctorId: string) {
+		const appointment = await prisma.appointment.findFirst({
+			where: {
+				appointmentNumber: number,
+				doctorId,
+			},
+		});
+
+		return appointment;
+	}
+
 	async findByDoctorId(id: string) {
 		const appointments = await prisma.appointment.findMany({
 			where: {

@@ -6,14 +6,16 @@ import z from 'zod';
 export async function createSpecialty(req: FastifyRequest, rep: FastifyReply) {
 	const createSpecialtyBodySchema = z.object({
 		name: z.string(),
+		description: z.string(),
 	});
 
-	const { name } = createSpecialtyBodySchema.parse(req.body);
+	const { name, description } = createSpecialtyBodySchema.parse(req.body);
 
 	try {
 		const createSpecialtyUseCase = makeCreateSpecialtyUseCase();
 		await createSpecialtyUseCase.execute({
 			name,
+			description,
 		});
 	} catch (err) {
 		if (err instanceof SpecialtyAlreadyExistsError) {

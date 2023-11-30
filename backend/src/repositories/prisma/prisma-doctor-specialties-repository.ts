@@ -32,7 +32,14 @@ export class PrismaDoctorSpecialtiesRepository
 		return doctorSpecialties;
 	}
 
-	async findBySpecialtyId(id: string) {
+	async findBySpecialtyId(id: string, page: number) {
+		const totalItems = await prisma.specialtiesOnDoctors.count({
+			where: {
+				specialtyId: id,
+			},
+		});
+		const totalPages = Math.ceil(totalItems / 10);
+
 		const doctorsBySpecialty = await prisma.specialtiesOnDoctors.findMany({
 			include: {
 				doctor: {
@@ -54,9 +61,11 @@ export class PrismaDoctorSpecialtiesRepository
 			where: {
 				specialtyId: id,
 			},
+			take: 10,
+			skip: (page - 1) * 10,
 		});
 
-		return doctorsBySpecialty;
+		return { data: doctorsBySpecialty, totalPages };
 	}
 
 	async create(data: Prisma.SpecialtiesOnDoctorsUncheckedCreateInput) {

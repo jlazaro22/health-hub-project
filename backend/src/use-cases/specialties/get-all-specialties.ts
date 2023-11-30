@@ -1,16 +1,23 @@
 import { SpecialtiesRepository } from '@/repositories/specialties-repository';
 import { Specialty } from '@prisma/client';
 
+interface GetAllSpecialtiesUseCaseRequest {
+	page: number;
+}
+
 interface GetAllSpecialtiesUseCaseResponse {
-	specialties: Specialty[] | null;
+	specialties: Specialty[];
+	totalPages: number;
 }
 
 export class GetAllSpecialtiesUseCase {
 	constructor(private specialtiesRepository: SpecialtiesRepository) {}
 
-	async execute(): Promise<GetAllSpecialtiesUseCaseResponse> {
-		const specialties = await this.specialtiesRepository.getAll();
+	async execute({
+		page,
+	}: GetAllSpecialtiesUseCaseRequest): Promise<GetAllSpecialtiesUseCaseResponse> {
+		const { data, totalPages } = await this.specialtiesRepository.getAll(page);
 
-		return { specialties };
+		return { specialties: data, totalPages };
 	}
 }

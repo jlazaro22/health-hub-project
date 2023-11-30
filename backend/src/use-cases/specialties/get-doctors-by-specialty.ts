@@ -5,10 +5,12 @@ import { SpecialtiesOnDoctors } from '@prisma/client';
 
 interface GetDoctorsBySpecialtyUseCaseRequest {
 	specialtyId: string;
+	page: number;
 }
 
 interface GetDoctorsBySpecialtyUseCaseResponse {
-	doctorsBySpecialty: SpecialtiesOnDoctors[] | null;
+	doctorsBySpecialty: SpecialtiesOnDoctors[];
+	totalPages: number;
 }
 
 export class GetDoctorsBySpecialtyUseCase {
@@ -19,6 +21,7 @@ export class GetDoctorsBySpecialtyUseCase {
 
 	async execute({
 		specialtyId,
+		page,
 	}: GetDoctorsBySpecialtyUseCaseRequest): Promise<GetDoctorsBySpecialtyUseCaseResponse> {
 		const specialty = await this.specialtiesRepository.findById(specialtyId);
 
@@ -26,9 +29,12 @@ export class GetDoctorsBySpecialtyUseCase {
 			throw new ResourceNotFoundError();
 		}
 
-		const doctorsBySpecialty =
-			await this.doctorSpecialtiesRepository.findBySpecialtyId(specialty.id);
+		const { data, totalPages } =
+			await this.doctorSpecialtiesRepository.findBySpecialtyId(
+				specialty.id,
+				page
+			);
 
-		return { doctorsBySpecialty };
+		return { doctorsBySpecialty: data, totalPages };
 	}
 }

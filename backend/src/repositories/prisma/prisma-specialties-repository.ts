@@ -31,9 +31,15 @@ export class PrismaSpecialtiesRepository implements SpecialtiesRepository {
 		return specialty;
 	}
 
-	async getAll() {
-		const specialties = await prisma.specialty.findMany();
+	async getAll(page: number) {
+		const totalItems = await prisma.specialty.count();
+		const totalPages = Math.ceil(totalItems / 10);
 
-		return specialties;
+		const specialties = await prisma.specialty.findMany({
+			take: 10,
+			skip: (page - 1) * 10,
+		});
+
+		return { data: specialties, totalPages };
 	}
 }
