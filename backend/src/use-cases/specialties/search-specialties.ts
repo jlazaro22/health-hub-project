@@ -1,22 +1,27 @@
 import { SpecialtiesRepository } from '@/repositories/specialties-repository';
 import { Specialty } from '@prisma/client';
 
-interface GetAllSpecialtiesUseCaseRequest {
+interface SearchSpecialtiesUseCaseRequest {
+	query: string;
 	page: number;
 }
 
-interface GetAllSpecialtiesUseCaseResponse {
+interface SearchSpecialtiesUseCaseResponse {
 	specialties: Specialty[];
 	totalPages: number;
 }
 
-export class GetAllSpecialtiesUseCase {
+export class SearchSpecialtiesUseCase {
 	constructor(private specialtiesRepository: SpecialtiesRepository) {}
 
 	async execute({
+		query,
 		page,
-	}: GetAllSpecialtiesUseCaseRequest): Promise<GetAllSpecialtiesUseCaseResponse> {
-		const { data, totalPages } = await this.specialtiesRepository.getAll(page);
+	}: SearchSpecialtiesUseCaseRequest): Promise<SearchSpecialtiesUseCaseResponse> {
+		const { data, totalPages } = await this.specialtiesRepository.searchMany(
+			query,
+			page
+		);
 
 		return { specialties: data, totalPages };
 	}

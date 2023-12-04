@@ -76,5 +76,5 @@ Plataforma de gestão para clínica médica
 
 - [x] A password do utilizador vai ser criptografada;
 - [x] Os dados da aplicação vão estar persistidos numa base de dados PostgreSQL;
-- [ ] Todas as listas de dados vão ser paginadas com 10 registos por página;
+- [x] Todas as listas de dados vão ser paginadas com 10 registos por página;
 - [x] O utilizador vai ser identificado por um JWT (JSON Web Token);

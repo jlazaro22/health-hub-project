@@ -10,14 +10,14 @@ export interface UsersRepository {
 	findByEmail(email: string): Promise<User | null>;
 	create(data: Prisma.UserUncheckedCreateInput): Promise<User>;
 	getRole(name: string): Promise<Role | null>;
-	getAllUsers(page: number): Promise<Paginable<User>>;
+	searchManyUsers(query: string, page: number): Promise<Paginable<User>>;
 
 	findPatientById(id: string): Promise<Patient | null>;
 	findPatientByUserId(id: string): Promise<Patient | null>;
 	createPatient(data: Prisma.PatientUncheckedCreateInput): Promise<Patient>;
-	getAllPatients(page: number): Promise<Paginable<Patient>>;
+	searchManyPatients(query: string, page: number): Promise<Paginable<Patient>>;
 
 	findDoctorById(id: string): Promise<Doctor | null>;
 	createDoctor(data: Prisma.DoctorUncheckedCreateInput): Promise<Doctor>;
-	getAllDoctors(page: number): Promise<Paginable<Doctor>>;
+	searchManyDoctors(query: string, page: number): Promise<Paginable<Doctor>>;
 }

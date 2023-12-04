@@ -4,7 +4,7 @@ import z from 'zod';
 
 export async function searchMedicines(req: FastifyRequest, rep: FastifyReply) {
 	const searchMedicinesQuerySchema = z.object({
-		query: z.string(),
+		query: z.string().default(''),
 		page: z.coerce.number().min(1).default(1),
 	});
 

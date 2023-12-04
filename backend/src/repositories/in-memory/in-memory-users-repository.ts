@@ -62,8 +62,31 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async getAllUsers() {
-		return this.users;
+	async searchManyUsers(query: string, page: number) {
+		const totalItems = this.users.length;
+		const totalPages = Math.ceil(totalItems / 10);
+
+		return { data: this.users, totalPages };
+	}
+
+	async findPatientById(id: string) {
+		const patient = this.patients.find((item) => item.id === id);
+
+		if (!patient) {
+			return null;
+		}
+
+		return patient;
+	}
+
+	async findPatientByUserId(id: string) {
+		const patient = this.patients.find((item) => item.userId === id);
+
+		if (!patient) {
+			return null;
+		}
+
+		return patient;
 	}
 
 	async createPatient(data: Prisma.PatientUncheckedCreateInput) {
@@ -83,8 +106,11 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return patient;
 	}
 
-	async getAllPatients() {
-		return this.patients;
+	async searchManyPatients(query: string, page: number) {
+		const totalItems = this.patients.length;
+		const totalPages = Math.ceil(totalItems / 10);
+
+		return { data: this.patients, totalPages };
 	}
 
 	async findDoctorById(id: string) {
@@ -114,8 +140,11 @@ export class InMemoryUsersRepository implements UsersRepository {
 		return doctor;
 	}
 
-	async getAllDoctors() {
-		return this.doctors;
+	async searchManyDoctors(query: string, page: number) {
+		const totalItems = this.doctors.length;
+		const totalPages = Math.ceil(totalItems / 10);
+
+		return { data: this.doctors, totalPages };
 	}
 
 	async getRole(name: string) {

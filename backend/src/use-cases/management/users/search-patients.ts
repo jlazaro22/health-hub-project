@@ -1,22 +1,25 @@
 import { UsersRepository } from '@/repositories/users-repository';
 import { Patient } from '@prisma/client';
 
-interface getAllPatientsUseCaseRequest {
+interface SearchPatientsUseCaseRequest {
+	query: string;
 	page: number;
 }
 
-interface getAllPatientsUseCaseResponse {
+interface SearchPatientsUseCaseResponse {
 	patients: Patient[];
 	totalPages: number;
 }
 
-export class GetAllPatientsUseCase {
+export class SearchPatientsUseCase {
 	constructor(private usersRepository: UsersRepository) {}
 
 	async execute({
+		query,
 		page,
-	}: getAllPatientsUseCaseRequest): Promise<getAllPatientsUseCaseResponse> {
-		const { data, totalPages } = await this.usersRepository.getAllPatients(
+	}: SearchPatientsUseCaseRequest): Promise<SearchPatientsUseCaseResponse> {
+		const { data, totalPages } = await this.usersRepository.searchManyPatients(
+			query,
 			page
 		);
 

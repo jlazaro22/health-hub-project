@@ -31,11 +31,24 @@ export class PrismaSpecialtiesRepository implements SpecialtiesRepository {
 		return specialty;
 	}
 
-	async getAll(page: number) {
-		const totalItems = await prisma.specialty.count();
+	async searchMany(query: string, page: number) {
+		const totalItems = await prisma.specialty.count({
+			where: {
+				name: {
+					contains: query,
+					mode: 'insensitive',
+				},
+			},
+		});
 		const totalPages = Math.ceil(totalItems / 10);
 
 		const specialties = await prisma.specialty.findMany({
+			where: {
+				name: {
+					contains: query,
+					mode: 'insensitive',
+				},
+			},
 			take: 10,
 			skip: (page - 1) * 10,
 		});

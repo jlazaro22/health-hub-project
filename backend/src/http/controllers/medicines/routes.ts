@@ -1,7 +1,6 @@
 import { verifyJwt } from '@/http/middlewares/verify-jwt';
 import { verifyLoggedUserRole } from '@/http/middlewares/verify-logged-user-role';
 import { FastifyInstance } from 'fastify';
-import { getAllMedicines } from './get-all-medicines';
 import { searchMedicines } from './search-medicines';
 
 export async function medicinesRoutes(app: FastifyInstance) {
@@ -11,6 +10,5 @@ export async function medicinesRoutes(app: FastifyInstance) {
 		verifyLoggedUserRole(['ADMINISTRADOR', 'COLABORADOR', 'MEDICO'])
 	);
 
-	app.get('/medicines', getAllMedicines);
-	app.get('/medicines/search', searchMedicines);
+	app.get('/medicines', searchMedicines);
 }

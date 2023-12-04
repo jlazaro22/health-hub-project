@@ -36,8 +36,23 @@ export class PrismaUsersRepository implements UsersRepository {
 		return user;
 	}
 
-	async getAllUsers(page: number) {
-		const totalItems = await prisma.user.count();
+	async searchManyUsers(query: string, page: number) {
+		const totalItems = await prisma.user.count({
+			where: {
+				OR: [
+					{
+						name: {
+							contains: query,
+						},
+					},
+					{
+						email: {
+							contains: query,
+						},
+					},
+				],
+			},
+		});
 		const totalPages = Math.ceil(totalItems / 10);
 
 		const users = await prisma.user.findMany({
@@ -47,6 +62,20 @@ export class PrismaUsersRepository implements UsersRepository {
 						name: true,
 					},
 				},
+			},
+			where: {
+				OR: [
+					{
+						name: {
+							contains: query,
+						},
+					},
+					{
+						email: {
+							contains: query,
+						},
+					},
+				],
 			},
 			take: 10,
 			skip: (page - 1) * 10,
@@ -81,8 +110,25 @@ export class PrismaUsersRepository implements UsersRepository {
 		return patient;
 	}
 
-	async getAllPatients(page: number) {
-		const totalItems = await prisma.patient.count();
+	async searchManyPatients(query: string, page: number) {
+		const totalItems = await prisma.patient.count({
+			where: {
+				user: {
+					OR: [
+						{
+							name: {
+								contains: query,
+							},
+						},
+						{
+							email: {
+								contains: query,
+							},
+						},
+					],
+				},
+			},
+		});
 		const totalPages = Math.ceil(totalItems / 10);
 
 		const patients = await prisma.patient.findMany({
@@ -92,6 +138,22 @@ export class PrismaUsersRepository implements UsersRepository {
 						name: true,
 						email: true,
 					},
+				},
+			},
+			where: {
+				user: {
+					OR: [
+						{
+							name: {
+								contains: query,
+							},
+						},
+						{
+							email: {
+								contains: query,
+							},
+						},
+					],
 				},
 			},
 			take: 10,
@@ -117,8 +179,25 @@ export class PrismaUsersRepository implements UsersRepository {
 		return doctor;
 	}
 
-	async getAllDoctors(page: number) {
-		const totalItems = await prisma.doctor.count();
+	async searchManyDoctors(query: string, page: number) {
+		const totalItems = await prisma.doctor.count({
+			where: {
+				user: {
+					OR: [
+						{
+							name: {
+								contains: query,
+							},
+						},
+						{
+							email: {
+								contains: query,
+							},
+						},
+					],
+				},
+			},
+		});
 		const totalPages = Math.ceil(totalItems / 10);
 
 		const doctors = await prisma.doctor.findMany({
@@ -128,6 +207,22 @@ export class PrismaUsersRepository implements UsersRepository {
 						name: true,
 						email: true,
 					},
+				},
+			},
+			where: {
+				user: {
+					OR: [
+						{
+							name: {
+								contains: query,
+							},
+						},
+						{
+							email: {
+								contains: query,
+							},
+						},
+					],
 				},
 			},
 			take: 10,
