@@ -7,7 +7,6 @@ import { DoctorSchedulesRepository } from '@/repositories/doctor-schedules-repos
 import { DoctorScheduleAlreadyTakenError } from '../errors/doctor-schedule-already-taken-error';
 import dayjs from 'dayjs';
 import { DoctorScheduleOutdatedError } from '../errors/doctor-schedule-outdated-error';
-import { OperationNotAllowedError } from '../errors/operation-not-allowed-error';
 import { AppointmentPatientNotProvidedError } from '../errors/appointment-patient-not-provided-error';
 
 interface CreateAppointmentUseCaseRequest {
@@ -39,14 +38,6 @@ export class CreateAppointmentUseCase {
 		updatedBy,
 		loggedUserRole,
 	}: CreateAppointmentUseCaseRequest): Promise<CreateAppointmentUseCaseResponse> {
-		if (
-			loggedUserRole !== 'PACIENTE' &&
-			loggedUserRole !== 'ADMINISTRADOR' &&
-			loggedUserRole !== 'COLABORADOR'
-		) {
-			throw new OperationNotAllowedError();
-		}
-
 		const newAppointmentNumber =
 			(await this.appointmentsRepository.countByDoctorId(doctorId)) + 1;
 

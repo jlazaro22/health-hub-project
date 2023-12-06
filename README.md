@@ -53,10 +53,11 @@ Plataforma de gestão para clínica médica
 - [x] O _paciente_ deve poder registar-se e autenticar-se;
 - [x] Permitir obter o perfil do utilizador activo;
 - [x] O paciente pode marcar uma consulta de forma autónoma;
+- [ ] O paciente pode cancelar uma consulta de forma autónoma;
 - [ ] O paciente pode consultar a sua agenda de consultas (passadas e futuras);
 - [ ] O médico pode consultar a ficha do paciente com todo o histórico;
 - [x] O médico pode consultar a sua agenda
-- [ ] O médico deve ter acesso a uma lista de fármacos que pode receitar;
+- [x] O médico deve ter acesso a uma lista de fármacos que pode receitar;
 
 #### Regras de negócio
 
@@ -70,7 +71,7 @@ Plataforma de gestão para clínica médica
 - [x] A agenda dos médicos não pode conter horários de consultas repetidos (mesmo dia e intervalo de tempo)
 - [x] Um horário da agenda de um médico só pode ser removido da BD com data no futuro (prevenir que sejam removidos horários em que possa ter havido consultas)
 - [x] Uma consulta só pode ser marcada para uma data no futuro e desde que a data esteja livre para o médico escolhido;
-- [ ] Uma consulta só pode ser removida da BD com data no futuro, consultas já efectuadas não podem ser removidas
+- [ ] Uma consulta só pode ser alterada/cancelada com data no futuro, consultas já efectuadas não podem ser alteradas/canceladas
 
 #### Requisitos não funcionais
 

@@ -1,5 +1,5 @@
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository';
-import { SearchPatientsUseCase } from '../management/users/search-patients';
+import { SearchPatientsUseCase } from '../management/patients/search-patients';
 
 export function makeSearchPatientsUseCase() {
 	const usersRepository = new PrismaUsersRepository();

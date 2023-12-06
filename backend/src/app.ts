@@ -10,6 +10,7 @@ import { doctorsRoutes } from './http/controllers/doctors/routes';
 import { specialtiesRoutes } from './http/controllers/specialties/routes';
 import { medicinesRoutes } from './http/controllers/medicines/routes';
 import { doctorSchedulesRoutes } from './http/controllers/doctor-schedules/routes';
+import { patientsRoutes } from './http/controllers/patients/routes';
 
 export const app = fastify();
 
@@ -31,6 +32,7 @@ app.register(managementRoutes, {
 app.register(doctorsRoutes);
 app.register(specialtiesRoutes);
 app.register(doctorSchedulesRoutes);
+app.register(patientsRoutes);
 app.register(appointmentsRoutes);
 app.register(medicinesRoutes);
 

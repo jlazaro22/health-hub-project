@@ -173,6 +173,16 @@ export class PrismaUsersRepository implements UsersRepository {
 		return doctor;
 	}
 
+	async findDoctorByUserId(id: string) {
+		const doctor = await prisma.doctor.findUnique({
+			where: {
+				userId: id,
+			},
+		});
+
+		return doctor;
+	}
+
 	async createDoctor(data: Prisma.DoctorUncheckedCreateInput) {
 		const doctor = await prisma.doctor.create({ data });
 

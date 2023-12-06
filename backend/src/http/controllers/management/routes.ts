@@ -4,7 +4,7 @@ import { createUser } from './users/create-user';
 import { verifyLoggedUserRole } from '@/http/middlewares/verify-logged-user-role';
 import { createSpecialty } from './specialties/create-specialty';
 import { createMedicine } from './medicines/create-medicine';
-import { searchPatients } from './users/search-patients';
+import { searchPatients } from './patients/search-patients';
 import { searchUsers } from './users/search-users';
 import { assignDoctorSpecialty } from './doctor-specialties/assign-doctor-specialty';
 import { createDoctorSchedule } from './doctor-schedules/create-doctor-schedule';

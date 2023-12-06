@@ -7,7 +7,16 @@ import { verifyLoggedUserRole } from '@/http/middlewares/verify-logged-user-role
 export async function appointmentsRoutes(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt);
 
-	app.post('/appointments', createAppointment);
+	app.post(
+		'/appointments',
+		{
+			onRequest: [
+				verifyLoggedUserRole(['ADMINISTRADOR', 'COLABORADOR', 'PACIENTE']),
+			],
+		},
+		createAppointment
+	);
+
 	app.post(
 		'/appointments/:appointmentNumber/:appointmentDoctorId/prescriptions',
 		{ onRequest: [verifyLoggedUserRole(['MEDICO'])] },

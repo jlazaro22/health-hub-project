@@ -18,6 +18,7 @@ export interface UsersRepository {
 	searchManyPatients(query: string, page: number): Promise<Paginable<Patient>>;
 
 	findDoctorById(id: string): Promise<Doctor | null>;
+	findDoctorByUserId(id: string): Promise<Doctor | null>;
 	createDoctor(data: Prisma.DoctorUncheckedCreateInput): Promise<Doctor>;
 	searchManyDoctors(query: string, page: number): Promise<Paginable<Doctor>>;
 }
