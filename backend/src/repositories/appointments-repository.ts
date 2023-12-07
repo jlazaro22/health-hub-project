@@ -5,5 +5,6 @@ export interface AppointmentsRepository {
 	findByDoctorId(id: string): Promise<Appointment[] | null>;
 	findByPatientId(id: string): Promise<Appointment[] | null>;
 	create(data: Prisma.AppointmentUncheckedCreateInput): Promise<Appointment>;
+	cancel(number: number, doctorId: string): Promise<void>;
 	countByDoctorId(id: string): Promise<number>;
 }

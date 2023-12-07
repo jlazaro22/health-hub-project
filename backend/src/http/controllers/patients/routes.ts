@@ -10,7 +10,12 @@ export async function patientsRoutes(app: FastifyInstance) {
 		'/patients/appointments',
 		{
 			onRequest: [
-				verifyLoggedUserRole(['ADMINISTRADOR', 'COLABORADOR', 'PACIENTE']),
+				verifyLoggedUserRole([
+					'ADMINISTRADOR',
+					'COLABORADOR',
+					'MEDICO',
+					'PACIENTE',
+				]),
 			],
 		},
 		getPatientAppointments
