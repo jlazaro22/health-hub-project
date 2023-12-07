@@ -31,8 +31,8 @@ Plataforma de gestão para clínica médica
   ```shell
   docker compose up -d
   ```
-  
-- Criar ficheiro `backend/.env` à semelhança do ficheiro `backend/.env.example` e incluir o `DATABASE_URL`:
+
+- Criar ficheiro `backend/.env` à semelhança do ficheiro `backend/.env.example` e incluir o `DATABASE_URL` (incluo o user e password por ser um exercício, num caso real não o faria):
 
   ```env
   NODE_ENV=dev
