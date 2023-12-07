@@ -65,6 +65,8 @@ Plataforma de gestão para clínica médica
 
 - A implementar brevemente...
 
+---
+
 #### Requisitos funcionais
 
 - [x] O _paciente_ deve poder registar-se e autenticar-se;
