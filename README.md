@@ -22,6 +22,7 @@ Plataforma de gestão para clínica médica
 - Instalação das dependências da aplicação
 
   ```shell
+  cd backend
   npm install
   ```
 
@@ -29,6 +30,18 @@ Plataforma de gestão para clínica médica
 
   ```shell
   docker compose up -d
+  ```
+  
+- Criar ficheiro `backend/.env` à semelhança do ficheiro `backend/.env.example` e incluir o `DATABASE_URL`:
+
+  ```env
+  NODE_ENV=dev
+  PORT=3333
+
+  JWT_SECRET=ToBeDefinedSecretToken
+
+  # Prisma connection string
+  DATABASE_URL="postgresql://docker:docker@localhost:5432/health-hub?schema=public"
   ```
 
 - Correr as migrações e seeds do Prisma para a BD (**importante** ler comentário na linha 23, no ficheiro `backend/prisma/seeds/db-seed.ts`).
