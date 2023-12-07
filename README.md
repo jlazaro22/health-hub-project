@@ -61,6 +61,10 @@ Plataforma de gestão para clínica médica
   - Email: <superuser@example.com>
   - Senha: 123456
 
+### Frontend
+
+- A implementar brevemente...
+
 #### Requisitos funcionais
 
 - [x] O _paciente_ deve poder registar-se e autenticar-se;
