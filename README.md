@@ -72,7 +72,7 @@ Deploy: <https://health-hub-2w2j.onrender.com>
   - Email: <superuser@example.com>
   - Senha: 123456
 
-- Lista de rotas da API (documentado com o Swagger): <http://127.0.0.1:3333/documentation>
+- Lista de rotas da API (documentado com o Swagger): <http://localhost:3333/documentation>
 
   Nota: implementei alguns schemas ("routesSchemas.ts"), que planeio incluir nas rotas para melhor documentar a API, mas como não me foi possível terminar, mantive só os ficheiros.
 
