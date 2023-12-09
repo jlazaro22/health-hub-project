@@ -50,6 +50,12 @@ Plataforma de gestão para clínica médica
   npx prisma migrate dev
   ```
 
+- Caso optar por alterar o seed (**importante** ler comentário na linha 23, no ficheiro `backend/prisma/seeds/db-seed.ts`):
+
+  ```shell
+  npx prisma migrate reset
+  ```
+
 - Correr o projecto:
 
   ```shell
