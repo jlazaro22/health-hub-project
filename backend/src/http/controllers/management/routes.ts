@@ -10,6 +10,7 @@ import { assignDoctorSpecialty } from './doctor-specialties/assign-doctor-specia
 import { createDoctorSchedule } from './doctor-schedules/create-doctor-schedule';
 import { roles } from './roles/roles';
 import { removeDoctorSchedule } from './doctor-schedules/remove-doctor-schedule';
+import { createUserSchema, searchUsersSchema } from './routes-schemas';
 
 export async function managementRoutes(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt);

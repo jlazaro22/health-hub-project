@@ -1,9 +1,11 @@
 import fastify from 'fastify';
-import { usersRoutes } from './http/controllers/users/routes';
-import { ZodError } from 'zod';
-import { env } from './env';
 import fastifyJwt from '@fastify/jwt';
 import fastifyCookie from '@fastify/cookie';
+import fastifyCors from '@fastify/cors';
+import { env } from './env';
+import { ZodError } from 'zod';
+import { swagger } from './lib/swagger';
+import { usersRoutes } from './http/controllers/users/routes';
 import { managementRoutes } from './http/controllers/management/routes';
 import { appointmentsRoutes } from './http/controllers/appointments/routes';
 import { doctorsRoutes } from './http/controllers/doctors/routes';
@@ -13,6 +15,7 @@ import { doctorSchedulesRoutes } from './http/controllers/doctor-schedules/route
 import { patientsRoutes } from './http/controllers/patients/routes';
 
 export const app = fastify();
+app.register(fastifyCors, {});
 
 app.register(fastifyJwt, {
 	secret: env.JWT_SECRET,
@@ -20,10 +23,13 @@ app.register(fastifyJwt, {
 		cookieName: 'refreshToken',
 		signed: false,
 	},
-	// sign: { expiresIn: '10m' },
+	sign: { expiresIn: '10m' },
 });
 
 app.register(fastifyCookie);
+
+app.ready();
+swagger(app);
 
 app.register(usersRoutes);
 app.register(managementRoutes, {
