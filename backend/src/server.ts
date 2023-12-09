@@ -3,7 +3,7 @@ import { env } from './env';
 
 app
 	.listen({
-		host: '127.0.0.1',
+		host: 'localhost',
 		port: env.PORT,
 	})
 	.then((address) => console.log('🚀 Http server up on ' + address))
